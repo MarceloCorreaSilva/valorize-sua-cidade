@@ -5,6 +5,8 @@ import Default from "../Layouts/Default";
 
 // Components
 import Form from "../../components/Form";
+// import Map from "../../components/Map";
+import Table from "../../components/Table";
 
 function Home() {
   return (
@@ -12,7 +14,10 @@ function Home() {
       <section className="uk-section uk-section-small">
         <div className="uk-container">
           <Form />
-          <div className="lista uk-margin"></div>
+
+          {/* <Map /> */}
+          
+          <Table />
         </div>
       </section>
     </Default>
