@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "24e0202f38ca7df153b8fd9704f441f0",
+    "revision": "c655f1aba051f77b22c9cbb7978aa8fc",
     "url": "/valorize-sua-cidade/index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/valorize-sua-cidade/static/js/2.526e0a6b.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "08917ba6cb26d0319083",
-    "url": "/valorize-sua-cidade/static/js/main.c766002b.chunk.js"
+    "revision": "02c5c7eaa9eaa9cc7a33",
+    "url": "/valorize-sua-cidade/static/js/main.956bf782.chunk.js"
   },
   {
     "revision": "97befd6c662546ed08a9",
