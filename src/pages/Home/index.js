@@ -4,19 +4,19 @@ import React from "react";
 import Default from "../Layouts/Default";
 
 // Components
-import Form from "../../components/Form";
+import FormSearch from "../../components/FormSearch";
 // import Map from "../../components/Map";
-import Table from "../../components/Table";
+import { Table } from "../../components/Html";
 
 function Home() {
   return (
     <Default>
       <section className="uk-section uk-section-small">
         <div className="uk-container">
-          <Form />
+          <FormSearch />
 
           {/* <Map /> */}
-          
+
           <Table />
         </div>
       </section>

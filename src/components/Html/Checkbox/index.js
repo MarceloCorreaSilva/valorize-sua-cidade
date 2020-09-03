@@ -1,6 +1,6 @@
 import React from "react";
 
-function Checkbox({ name, label, checked, onChange }) {
+const Checkbox = ({ name, label, checked, onChange }) => {
   return (
     <label
       style={{
@@ -9,7 +9,7 @@ function Checkbox({ name, label, checked, onChange }) {
         height: "38px",
         lineHeight: "38px",
         fontSize: "20px",
-        fontWeight: "bold"
+        fontWeight: "bold",
       }}
     >
       <input
@@ -29,6 +29,6 @@ function Checkbox({ name, label, checked, onChange }) {
       {label}
     </label>
   );
-}
+};
 
-export default Checkbox;
+export { Checkbox };

@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 // Components
-import Select from "../Select";
-import Checkbox from "../Checkbox";
-import Button from "../Button";
+import { Select, Checkbox, Button } from "../Html";
 
 // Data
 import data from "../../data/data.json";
 
-function Form() {
+function FormSearch() {
   const [structures, setStructures] = useState([]);
   const [months, setMonths] = useState([]);
   const [livestocks, setLivestocks] = useState([]);
@@ -144,4 +142,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default FormSearch;

@@ -1,7 +1,14 @@
 import React from "react";
-import Select from "react-select";
+import ReactSelect from "react-select";
 
-function Header({ name, placeholder, isMultiple, value, options, onChange }) {
+const Select = ({
+  name,
+  placeholder,
+  isMultiple,
+  value,
+  options,
+  onChange,
+}) => {
   function customTheme(theme) {
     return {
       ...theme,
@@ -9,13 +16,13 @@ function Header({ name, placeholder, isMultiple, value, options, onChange }) {
         ...theme.colors,
         primary25: "#D3D3D3",
       },
-      borderRadius: false
+      borderRadius: false,
     };
   }
 
   return (
     <div className="uk-form-controls">
-      <Select
+      <ReactSelect
         id={name}
         name={name}
         placeholder={placeholder}
@@ -29,6 +36,6 @@ function Header({ name, placeholder, isMultiple, value, options, onChange }) {
       />
     </div>
   );
-}
+};
 
-export default Header;
+export { Select };
