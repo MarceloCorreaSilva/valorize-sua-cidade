@@ -4,7 +4,11 @@ function Button({ type, label }) {
   return (
     <button
       type={type}
-      className="form_submit uk-button uk-button-primary uk-width-expand uk-button-small uk-border-rounded"
+      className="uk-button uk-button-primary uk-button-large uk-width-expand"
+      style={{
+        fontSize: '20px',
+        fontWeight: 'bold'
+      }}
     >
       {label}
     </button>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 // Components
 import Select from "../Select";
 import Checkbox from "../Checkbox";
-import Button from "../Checkbox/Button";
+import Button from "../Button";
 
 // Data
 import data from "../../data/data.json";
@@ -25,7 +25,9 @@ function Form() {
       }}
     >
       <fieldset className="uk-fieldset">
-        <legend className="uk-legend">Selecione o que você procura:</legend>
+        <legend className="uk-legend">
+          <strong>Selecione o que você procura:</strong>
+        </legend>
 
         <div
           className="uk-child-width-expand@s uk-child-width-1-3@m uk-margin uk-grid-small uk-grid uk-grid-stack"
@@ -123,8 +125,8 @@ function Form() {
           <div className="uk-width-auto uk-grid-margin">
             <Link
               to="#"
-              className="uk-icon-link uk-icon"
-              uk-icon="close"
+              className="uk-button uk-button-default uk-button-large uk-icon-link uk-icon"
+              uk-icon="icon: close; ratio: 2"
               onClick={() => {
                 setStructures([]);
                 setMonths([]);

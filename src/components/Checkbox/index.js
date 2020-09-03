@@ -2,7 +2,16 @@ import React from "react";
 
 function Checkbox({ name, label, checked, onChange }) {
   return (
-    <label>
+    <label
+      style={{
+        display: "block",
+        verticalAlign: "top",
+        height: "38px",
+        lineHeight: "38px",
+        fontSize: "20px",
+        fontWeight: "bold"
+      }}
+    >
       <input
         id={name}
         name={name}
@@ -10,6 +19,12 @@ function Checkbox({ name, label, checked, onChange }) {
         type="checkbox"
         checked={checked}
         onChange={onChange}
+        style={{
+          width: "38px",
+          height: "38px",
+          // margin: "0 auto",
+          verticalAlign: "bottom",
+        }}
       />{" "}
       {label}
     </label>
