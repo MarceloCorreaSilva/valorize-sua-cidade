@@ -6,7 +6,7 @@ import Default from "../Layouts/Default";
 // Components
 import FormSearch from "../../components/FormSearch";
 // import Map from "../../components/Map";
-import { Table } from "../../components/Html";
+// import { Table } from "../../components/Html";
 
 function Home() {
   return (
@@ -17,7 +17,7 @@ function Home() {
 
           {/* <Map /> */}
 
-          <Table />
+          {/* <Table /> */}
         </div>
       </section>
     </Default>

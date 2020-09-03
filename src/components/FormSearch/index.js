@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 
+// Services
+import api from "../../services/api";
+
 // Components
 import { Select, Checkbox, Button } from "../Html";
 
@@ -15,6 +18,7 @@ function FormSearch() {
   const [commercializations, setCommercializations] = useState([]);
   const [coveredPlanting, setCoveredPlanting] = useState(false);
   const [irrigated, setIrrigated] = useState(false);
+  const [producers, setProducers] = useState([]);
 
   const handleClearSearchForm = useCallback(() => {
     setStructures([]);
@@ -26,121 +30,136 @@ function FormSearch() {
     setIrrigated(false);
   }, []);
 
-  return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-      }}
-    >
-      <fieldset className="uk-fieldset">
-        <legend className="uk-legend">
-          <strong>Selecione o que você procura:</strong>
-        </legend>
+  // Google Spreadsheet
+  const handleSearchGoogleSpreadsheet = useCallback(async () => {
+    await api.getAllProductors().then((response) => {
+      // setProducers(response);
+      console.log(response);
+    });
 
-        <div
-          className="uk-child-width-expand@s uk-child-width-1-3@m uk-margin uk-grid-small uk-grid uk-grid-stack"
-          uk-grid=""
-        >
-          <div className="uk-width-expand uk-first-column">
-            <Select
-              name="structures"
-              placeholder="Selecione a estrutura geográfica..."
-              isMultiple={true}
-              value={structures}
-              options={data.geographic_structure}
-              onChange={setStructures}
-            />
-          </div>
-          <div className="uk-width-1-2@s uk-grid-margin uk-first-column">
-            <Select
-              name="months"
-              placeholder="Selecione a sazonalidade..."
-              isMultiple={true}
-              value={months}
-              options={data.months}
-              onChange={setMonths}
-            />
-          </div>
-        </div>
-        <div
-          className="uk-child-width-expand@s uk-child-width-1-3@m uk-margin uk-grid-small uk-grid"
-          uk-grid=""
-        >
-          <div className="uk-width-expand uk-first-column">
-            <Select
-              name="livestocks"
-              placeholder="Selecione a pecuária..."
-              isMultiple={true}
-              value={livestocks}
-              options={data.livestock}
-              onChange={setLivestocks}
-            />
-          </div>
-          <div className="uk-width-expand">
-            <div id="filter_producao">
+    console.log(producers);
+  }, [producers]);
+
+  return (
+    <>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleSearchGoogleSpreadsheet();
+        }}
+      >
+        <fieldset className="uk-fieldset">
+          <legend className="uk-legend">
+            <strong>Selecione o que você procura:</strong>
+          </legend>
+
+          <div
+            className="uk-child-width-expand@s uk-child-width-1-3@m uk-margin uk-grid-small uk-grid uk-grid-stack"
+            uk-grid=""
+          >
+            <div className="uk-width-expand uk-first-column">
               <Select
-                name="productions"
-                placeholder="Selecione os gêneros alimentícios..."
+                name="structures"
+                placeholder="Selecione a estrutura geográfica..."
                 isMultiple={true}
-                value={productions}
-                options={data.production}
-                onChange={setProductions}
+                value={structures}
+                options={data.geographic_structure}
+                onChange={setStructures}
+              />
+            </div>
+            <div className="uk-width-1-2@s uk-grid-margin uk-first-column">
+              <Select
+                name="months"
+                placeholder="Selecione a sazonalidade..."
+                isMultiple={true}
+                value={months}
+                options={data.months}
+                onChange={setMonths}
               />
             </div>
           </div>
-        </div>
-        <div
-          className="uk-child-width-expand@s uk-child-width-1-3@m uk-margin uk-grid-small uk-grid"
-          uk-grid=""
-        >
-          <div className="uk-width-1-2@s uk-first-column">
-            <Select
-              name="commercializations"
-              placeholder="Selecione os canais de comercialização..."
-              isMultiple={true}
-              value={commercializations}
-              options={data.commercialization}
-              onChange={setCommercializations}
-            />
-          </div>
-          <div className="uk-width-1-2@s uk-grid-margin uk-first-column">
-            <div className="uk-child-width-expand uk-grid" uk-grid="">
-              <div className="uk-first-column">
-                <Checkbox
-                  name="coveredPlanting"
-                  label="Plantio coberto"
-                  checked={coveredPlanting}
-                  onChange={(event) => {
-                    setCoveredPlanting(event.target.checked);
-                  }}
-                />
-              </div>
-              <div>
-                <Checkbox
-                  name="irrigated"
-                  label="Irrigação"
-                  checked={irrigated}
-                  onChange={(event) => {
-                    setIrrigated(event.target.checked);
-                  }}
+          <div
+            className="uk-child-width-expand@s uk-child-width-1-3@m uk-margin uk-grid-small uk-grid"
+            uk-grid=""
+          >
+            <div className="uk-width-expand uk-first-column">
+              <Select
+                name="livestocks"
+                placeholder="Selecione a pecuária..."
+                isMultiple={true}
+                value={livestocks}
+                options={data.livestock}
+                onChange={setLivestocks}
+              />
+            </div>
+            <div className="uk-width-expand">
+              <div id="filter_producao">
+                <Select
+                  name="productions"
+                  placeholder="Selecione os gêneros alimentícios..."
+                  isMultiple={true}
+                  value={productions}
+                  options={data.production}
+                  onChange={setProductions}
                 />
               </div>
             </div>
           </div>
-          <div className="uk-width-expand uk-grid-margin uk-first-column">
-            <Button type="submit" label="Filtrar" />
+          <div
+            className="uk-child-width-expand@s uk-child-width-1-3@m uk-margin uk-grid-small uk-grid"
+            uk-grid=""
+          >
+            <div className="uk-width-1-2@s uk-first-column">
+              <Select
+                name="commercializations"
+                placeholder="Selecione os canais de comercialização..."
+                isMultiple={true}
+                value={commercializations}
+                options={data.commercialization}
+                onChange={setCommercializations}
+              />
+            </div>
+            <div className="uk-width-1-2@s uk-grid-margin uk-first-column">
+              <div className="uk-child-width-expand uk-grid" uk-grid="">
+                <div className="uk-first-column">
+                  <Checkbox
+                    name="coveredPlanting"
+                    label="Plantio coberto"
+                    checked={coveredPlanting}
+                    onChange={(event) => {
+                      setCoveredPlanting(event.target.checked);
+                    }}
+                  />
+                </div>
+                <div>
+                  <Checkbox
+                    name="irrigated"
+                    label="Irrigação"
+                    checked={irrigated}
+                    onChange={(event) => {
+                      setIrrigated(event.target.checked);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="uk-width-expand uk-grid-margin uk-first-column">
+              <Button type="submit" label="Filtrar" />
+            </div>
+            <div className="uk-width-auto uk-grid-margin">
+              <Link
+                to="#"
+                className="uk-button uk-button-default uk-button-large uk-icon-link uk-icon"
+                uk-icon="icon: close; ratio: 2"
+                onClick={handleClearSearchForm}
+              />
+            </div>
           </div>
-          <div className="uk-width-auto uk-grid-margin">
-            <Link
-              to="#"
-              className="uk-button uk-button-default uk-button-large uk-icon-link uk-icon"
-              uk-icon="icon: close; ratio: 2"
-              onClick={handleClearSearchForm}
-            />
-          </div>
-        </div>
-      </fieldset>
-    </form>
+        </fieldset>
+      </form>
+
+      {producers && producers.map((producer) => producer)}
+    </>
   );
 }
 
