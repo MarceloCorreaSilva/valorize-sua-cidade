@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 // Components
@@ -15,6 +15,16 @@ function FormSearch() {
   const [commercializations, setCommercializations] = useState([]);
   const [coveredPlanting, setCoveredPlanting] = useState(false);
   const [irrigated, setIrrigated] = useState(false);
+
+  const handleClearSearchForm = useCallback(() => {
+    setStructures([]);
+    setMonths([]);
+    setLivestocks([]);
+    setProductions([]);
+    setCommercializations([]);
+    setCoveredPlanting(false);
+    setIrrigated(false);
+  }, []);
 
   return (
     <form
@@ -125,15 +135,7 @@ function FormSearch() {
               to="#"
               className="uk-button uk-button-default uk-button-large uk-icon-link uk-icon"
               uk-icon="icon: close; ratio: 2"
-              onClick={() => {
-                setStructures([]);
-                setMonths([]);
-                setLivestocks([]);
-                setProductions([]);
-                setCommercializations([]);
-                setCoveredPlanting(false);
-                setIrrigated(false);
-              }}
+              onClick={handleClearSearchForm}
             />
           </div>
         </div>
