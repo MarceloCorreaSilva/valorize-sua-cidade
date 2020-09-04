@@ -2,8 +2,7 @@ import React, { useState, useCallback, FormEvent, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { ValueType, OptionTypeBase as OptionType } from "react-select";
 
-// Services
-// import api from "../../services/api";
+// Repositories
 import producerRepository from "../../repositories/Producer";
 import productRepository from "../../repositories/Product";
 import highlighterRepository from "../../repositories/Highlighter";
@@ -39,21 +38,20 @@ function FormSearch() {
   // Google Spreadsheet
   const handleSearchGoogleSpreadsheet = useCallback(async () => {
     await producerRepository.getAll().then((response) => {
-      // setProducers(response);
       console.log(response);
     });
 
     await productRepository.getAll().then((response) => {
       console.log(response);
-    })
+    });
 
     await highlighterRepository.getAll().then((response) => {
       console.log(response);
-    })
+    });
 
     await georeferencingRepository.getAll().then((response) => {
       console.log(response);
-    })
+    });
   }, []);
 
   return (

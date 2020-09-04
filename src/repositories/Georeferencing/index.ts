@@ -2,11 +2,11 @@ import { doc } from "../../services/api";
 
 // Props
 export interface Georeferencing {
-    ID: any;
-    Nome: any;
-    Proprietário: any;
-    Área: any;
-    Coordenadas: any;
+  ID: any;
+  Nome: any;
+  Proprietário: any;
+  Área: any;
+  Coordenadas: any;
 }
 
 const getAll = async () => {
@@ -25,7 +25,27 @@ const getAll = async () => {
     };
   });
 
+  // eslint-disable-next-line array-callback-return
+  itens.map((item) => {
+    create(item);
+  });
+
   return itens;
 };
 
-export default { getAll };
+const create = async (georeferencing: Georeferencing) => {
+  const response = await fetch(`http://localhost:8000/georeferencing`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(georeferencing),
+  });
+  if (response.ok) {
+    const resposta = await response.json();
+    return resposta;
+  }
+  throw new Error("Não foi possível cadastrar os dados");
+};
+
+export default { getAll, create };
