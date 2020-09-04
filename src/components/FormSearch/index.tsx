@@ -1,12 +1,13 @@
 import React, { useState, useCallback, FormEvent, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import {
-  ValueType,
-  OptionTypeBase as OptionType
-} from "react-select";
+import { ValueType, OptionTypeBase as OptionType } from "react-select";
 
 // Services
-import api from "../../services/api";
+// import api from "../../services/api";
+import producerRepository from "../../repositories/Producer";
+import productRepository from "../../repositories/Product";
+import highlighterRepository from "../../repositories/Highlighter";
+import georeferencingRepository from "../../repositories/Georeferencing";
 
 // Components
 import { Select, Checkbox, Button } from "../Html";
@@ -22,7 +23,8 @@ function FormSearch() {
   const [commercializations, setCommercializations] = useState([]);
   const [coveredPlanting, setCoveredPlanting] = useState(false);
   const [irrigated, setIrrigated] = useState(false);
-  const [producers, setProducers] = useState([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [producers, setProducers] = useState<{}[]>([]);
 
   const handleClearSearchForm = useCallback(() => {
     setStructures([]);
@@ -36,13 +38,23 @@ function FormSearch() {
 
   // Google Spreadsheet
   const handleSearchGoogleSpreadsheet = useCallback(async () => {
-    await api.getAllProductors().then((response) => {
+    await producerRepository.getAll().then((response) => {
       // setProducers(response);
       console.log(response);
     });
 
-    console.log(producers);
-  }, [producers]);
+    await productRepository.getAll().then((response) => {
+      console.log(response);
+    })
+
+    await highlighterRepository.getAll().then((response) => {
+      console.log(response);
+    })
+
+    await georeferencingRepository.getAll().then((response) => {
+      console.log(response);
+    })
+  }, []);
 
   return (
     <>
@@ -204,7 +216,9 @@ function FormSearch() {
         </fieldset>
       </form>
 
-      {producers && producers.map((producer) => producer)}
+      <hr />
+
+      {producers && producers}
     </>
   );
 }
