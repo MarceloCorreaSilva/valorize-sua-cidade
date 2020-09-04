@@ -4,7 +4,7 @@ import { GoogleSpreadsheet } from "google-spreadsheet";
 import credentials from "../credentials/google-sheets-api.json";
 
 const getAllProductors = async () => {
-  const doc = new GoogleSpreadsheet(process.env.REACT_APP_GOOGLE_SPREADSHEET);
+  const doc = new GoogleSpreadsheet(process.env.REACT_APP_GOOGLE_SPREADSHEET as string);
 
   await doc.useServiceAccountAuth({
     client_email: credentials.client_email,

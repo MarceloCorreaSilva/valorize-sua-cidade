@@ -4,7 +4,11 @@ import React from "react";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 
-function Default({ children }) {
+interface LayoutProps {
+  children: React.ReactNode
+}
+
+const Default: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="uk-offcanvas-content">
       <div uk-height-viewport="expand: true">

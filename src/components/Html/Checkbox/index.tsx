@@ -1,6 +1,17 @@
-import React from "react";
+import React, { InputHTMLAttributes } from "react";
 
-const Checkbox = ({ name, label, checked, onChange }) => {
+interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
+  name: string;
+  label: string;
+  checked: boolean;
+}
+
+const Checkbox: React.FC<CheckboxProps> = ({
+  name,
+  label,
+  checked,
+  onChange,
+}) => {
   return (
     <label
       style={{

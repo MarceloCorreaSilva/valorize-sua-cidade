@@ -1,7 +1,7 @@
 import React from "react";
-import ReactSelect from "react-select";
+import ReactSelect, { Props } from "react-select";
 
-const Select = ({
+const Select: React.FC<Props> = ({
   name,
   placeholder,
   isMultiple,
@@ -9,16 +9,16 @@ const Select = ({
   options,
   onChange,
 }) => {
-  function customTheme(theme) {
-    return {
-      ...theme,
-      colors: {
-        ...theme.colors,
-        primary25: "#D3D3D3",
-      },
-      borderRadius: false,
-    };
-  }
+  // function customTheme(theme) {
+  //   return {
+  //     ...theme,
+  //     colors: {
+  //       ...theme.colors,
+  //       primary25: "#D3D3D3",
+  //     },
+  //     borderRadius: false,
+  //   };
+  // }
 
   return (
     <div className="uk-form-controls">
@@ -30,7 +30,7 @@ const Select = ({
         value={value}
         options={options}
         onChange={onChange}
-        theme={customTheme}
+        // theme={customTheme}
         // className="basic-multi-select"
         // classNamePrefix="select"
       />

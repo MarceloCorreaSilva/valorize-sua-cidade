@@ -5,6 +5,7 @@ import {
   withGoogleMap,
   GoogleMap,
   Marker,
+  GoogleMapProps,
 } from "react-google-maps";
 
 class Map extends React.Component {
@@ -28,7 +29,7 @@ class Map extends React.Component {
 
   render() {
     const MapWithAMarker = withScriptjs(
-      withGoogleMap((props) => (
+      withGoogleMap((props: GoogleMapProps) => (
         <GoogleMap
           defaultZoom={10}
           defaultCenter={{ lat: this.state.mapPosition.lat, lng: this.state.mapPosition.lng }} 

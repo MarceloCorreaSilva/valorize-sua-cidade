@@ -10,7 +10,7 @@ function Routes() {
         <Route path="/" component={Home} exact />
         <Route path="/valorize-sua-cidade" component={Home} exact />
         <Route path="*">
-          <Redirect component={Home} />
+          <Redirect to="/" />
         </Route>
       </Switch>
     </BrowserRouter>

@@ -3,14 +3,14 @@ import React from "react";
 const Table = () => {
   return (
     <div className="lista uk-margin">
-      <div class="uk-width-expand uk-first-column">
+      <div className="uk-width-expand uk-first-column">
         <p>133 - Sitio Santa Tereza</p>
         <p>
           Proprietário(a): Jailson de Oliveira Soares / Irrigado: Sim / Cultivo
           protegido: Não / Veiculos: 1 / Comercialização: PNAE, PAA, FEIRA
         </p>
         <p></p>
-        <table class="uk-table uk-table-divider uk-table-small">
+        <table className="uk-table uk-table-divider uk-table-small">
           <tbody>
             <tr>
               <th>Produto</th>

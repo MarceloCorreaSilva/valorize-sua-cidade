@@ -1,5 +1,9 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, FormEvent, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
+import {
+  ValueType,
+  OptionTypeBase as OptionType
+} from "react-select";
 
 // Services
 import api from "../../services/api";
@@ -43,9 +47,11 @@ function FormSearch() {
   return (
     <>
       <form
-        onSubmit={(event) => {
+        onSubmit={(event: FormEvent) => {
           event.preventDefault();
           handleSearchGoogleSpreadsheet();
+
+          // console.log(structures);
         }}
       >
         <fieldset className="uk-fieldset">
@@ -64,7 +70,15 @@ function FormSearch() {
                 isMultiple={true}
                 value={structures}
                 options={data.geographic_structure}
-                onChange={setStructures}
+                // onChange={setStructures}
+                onChange={(selectedOption: ValueType<OptionType>) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const value = (selectedOption as OptionType).value;
+
+                  setStructures(
+                    selectedOption?.map((selected: OptionType) => selected)
+                  );
+                }}
               />
             </div>
             <div className="uk-width-1-2@s uk-grid-margin uk-first-column">
@@ -74,7 +88,15 @@ function FormSearch() {
                 isMultiple={true}
                 value={months}
                 options={data.months}
-                onChange={setMonths}
+                // onChange={setMonths}
+                onChange={(selectedOption: ValueType<OptionType>) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const value = (selectedOption as OptionType).value;
+
+                  setMonths(
+                    selectedOption?.map((selected: OptionType) => selected)
+                  );
+                }}
               />
             </div>
           </div>
@@ -89,7 +111,15 @@ function FormSearch() {
                 isMultiple={true}
                 value={livestocks}
                 options={data.livestock}
-                onChange={setLivestocks}
+                // onChange={setLivestocks}
+                onChange={(selectedOption: ValueType<OptionType>) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const value = (selectedOption as OptionType).value;
+
+                  setLivestocks(
+                    selectedOption?.map((selected: OptionType) => selected)
+                  );
+                }}
               />
             </div>
             <div className="uk-width-expand">
@@ -100,7 +130,15 @@ function FormSearch() {
                   isMultiple={true}
                   value={productions}
                   options={data.production}
-                  onChange={setProductions}
+                  // onChange={setProductions}
+                  onChange={(selectedOption: ValueType<OptionType>) => {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const value = (selectedOption as OptionType).value;
+
+                    setProductions(
+                      selectedOption?.map((selected: OptionType) => selected)
+                    );
+                  }}
                 />
               </div>
             </div>
@@ -116,7 +154,15 @@ function FormSearch() {
                 isMultiple={true}
                 value={commercializations}
                 options={data.commercialization}
-                onChange={setCommercializations}
+                // onChange={setCommercializations}
+                onChange={(selectedOption: ValueType<OptionType>) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const value = (selectedOption as OptionType).value;
+
+                  setCommercializations(
+                    selectedOption?.map((selected: OptionType) => selected)
+                  );
+                }}
               />
             </div>
             <div className="uk-width-1-2@s uk-grid-margin uk-first-column">
@@ -126,7 +172,7 @@ function FormSearch() {
                     name="coveredPlanting"
                     label="Plantio coberto"
                     checked={coveredPlanting}
-                    onChange={(event) => {
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
                       setCoveredPlanting(event.target.checked);
                     }}
                   />
@@ -136,7 +182,7 @@ function FormSearch() {
                     name="irrigated"
                     label="Irrigação"
                     checked={irrigated}
-                    onChange={(event) => {
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
                       setIrrigated(event.target.checked);
                     }}
                   />
