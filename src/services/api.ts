@@ -1,15 +1,7 @@
-import { GoogleSpreadsheet } from "google-spreadsheet";
+const URL_BACKEND = window.location.hostname.includes('localhost')
+  ? 'http://localhost:8000'
+  : 'https://valorize-sua-cidade.herokuapp.com/';
 
-// Credentials
-import credentials from "../credentials/google-sheets-api.json";
-
-const doc = new GoogleSpreadsheet(
-  process.env.REACT_APP_GOOGLE_SPREADSHEET as string
-);
-
-doc.useServiceAccountAuth({
-  client_email: credentials.client_email,
-  private_key: credentials.private_key
-});
-
-export { doc };
+export default {
+  URL_BACKEND,
+};

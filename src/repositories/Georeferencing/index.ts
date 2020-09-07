@@ -1,12 +1,12 @@
-import { doc } from "../../services/api";
+import { doc } from "../../services/google.spreadsheets";
 
 // Props
 export interface Georeferencing {
-  ID: any;
-  Nome: any;
-  Proprietário: any;
-  Área: any;
-  Coordenadas: any;
+  id: number;
+  name: string;
+  owner: string;
+  area: string;
+  coordinates: string;
 }
 
 const getAll = async () => {
@@ -16,12 +16,14 @@ const getAll = async () => {
   const sheet = doc.sheetsByIndex[3];
   const rows = await sheet.getRows();
   const itens = rows.map(({ ID, Nome, Proprietário, Área, Coordenadas }) => {
+    // coordinateRepository.create(ID, Coordenadas);
+
     return {
-      ID,
-      Nome,
-      Proprietário,
-      Área,
-      Coordenadas,
+      id: ID,
+      name: Nome,
+      owner: Proprietário,
+      area: Área,
+      coordinates: Coordenadas.replaceAll('"', '')
     };
   });
 
@@ -41,11 +43,12 @@ const create = async (georeferencing: Georeferencing) => {
     },
     body: JSON.stringify(georeferencing),
   });
-  if (response.ok) {
-    const resposta = await response.json();
-    return resposta;
-  }
-  throw new Error("Não foi possível cadastrar os dados");
+  return response.status;
+  // if (response.ok) {
+  //   const resposta = await response.json();
+  //   return resposta;
+  // }
+  // throw new Error("Não foi possível cadastrar os dados");
 };
 
 export default { getAll, create };

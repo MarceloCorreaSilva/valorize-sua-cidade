@@ -1,13 +1,13 @@
-import { doc } from "../../services/api";
+import { doc } from "../../services/google.spreadsheets";
 
 // Props
 export interface Highlighter {
-  ID: any;
-  Tipo: any;
-  Nome: any;
-  Latitude: any;
-  Longitude: any;
-  Descrição: any;
+  id: number;
+  type: string;
+  name: string;
+  lat: string;
+  lng: string;
+  description: string;
 }
 
 const getAll = async () => {
@@ -19,12 +19,12 @@ const getAll = async () => {
   const itens = rows.map(
     ({ ID, Tipo, Nome, Latitude, Longitude, Descrição }) => {
       return {
-        ID,
-        Tipo,
-        Nome,
-        Latitude,
-        Longitude,
-        Descrição,
+        'id': ID,
+        'type': Tipo,
+        'name': Nome,
+        'lat': Latitude,
+        'lng': Longitude,
+        'description': Descrição,
       };
     }
   );
@@ -45,11 +45,13 @@ const create = async (highlighter: Highlighter) => {
     },
     body: JSON.stringify(highlighter),
   });
-  if (response.ok) {
-    const resposta = await response.json();
-    return resposta;
-  }
-  throw new Error("Não foi possível cadastrar os dados");
+
+  return response.status;
+  // if (response.ok) {
+  //   const resposta = await response.json();
+  //   return resposta;
+  // }
+  // throw new Error("Não foi possível cadastrar os dados");
 };
 
 export default { getAll, create };

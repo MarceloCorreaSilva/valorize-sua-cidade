@@ -1,22 +1,22 @@
-import { doc } from "../../services/api";
+import { doc } from "../../services/google.spreadsheets";
 
 // Props
 export interface Product {
-  Produtor: any;
-  Produto: any;
-  Ano: any;
-  Janeiro: any;
-  Fevereiro: any;
-  Março: any;
-  Abril: any;
-  Maio: any;
-  Junho: any;
-  Julho: any;
-  Agosto: any;
-  Setembro: any;
-  Outubro: any;
-  Novembro: any;
-  Dezembro: any;
+  producerId: number;
+  name: string;
+  year: number;
+  jan: number;
+  fev: number;
+  mar: number;
+  abr: number;
+  mai: number;
+  jun: number;
+  jul: number;
+  ago: number;
+  set: number;
+  out: number;
+  nov: number;
+  dez: number;
 }
 
 const getAll = async () => {
@@ -44,21 +44,21 @@ const getAll = async () => {
       Dezembro,
     }) => {
       return {
-        Produtor,
-        Produto,
-        Ano,
-        Janeiro,
-        Fevereiro,
-        Março,
-        Abril,
-        Maio,
-        Junho,
-        Julho,
-        Agosto,
-        Setembro,
-        Outubro,
-        Novembro,
-        Dezembro,
+        'producerId': Produtor,
+        'name': Produto,
+        'year': Ano,
+        'jan': Janeiro,
+        'fev': Fevereiro,
+        'mar': Março,
+        'abr': Abril,
+        'mai': Maio,
+        'jun': Junho,
+        'jul': Julho,
+        'ago': Agosto,
+        'set': Setembro,
+        'out': Outubro,
+        'nov': Novembro,
+        'dez': Dezembro,
       };
     }
   );
@@ -79,11 +79,13 @@ const create = async (product: Product) => {
     },
     body: JSON.stringify(product),
   });
-  if (response.ok) {
-    const resposta = await response.json();
-    return resposta;
-  }
-  throw new Error("Não foi possível cadastrar os dados");
+
+  return response.status;
+  // if (response.ok) {
+  //   const resposta = await response.json();
+  //   return resposta;
+  // }
+  // throw new Error("Não foi possível cadastrar os dados");
 };
 
 export default { getAll, create };

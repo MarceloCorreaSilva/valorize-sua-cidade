@@ -1,19 +1,56 @@
 import React from "react";
 
-const Table = () => {
+// Props
+interface TableProps {
+  data: {
+    id: number;
+    nome: string;
+    proprietario: string;
+    irrigacao: boolean;
+    cultivo_protegido: boolean;
+    veiculos: number;
+    comercializacao: string;
+    products: {
+      name: string;
+      year: number;
+      jan: number;
+      fev: number;
+      mar: number;
+      abr: number;
+      mai: number;
+      jun: number;
+      jul: number;
+      ago: number;
+      set: number;
+      out: number;
+      nov: number;
+      dez: number;
+    }[];
+  };
+}
+
+const Table: React.FC<TableProps> = ({ data }) => {
   return (
-    <div className="lista uk-margin">
-      <div className="uk-width-expand uk-first-column">
-        <p>133 - Sitio Santa Tereza</p>
+    <div className="uk-card uk-card-default" style={{marginBottom: '25px'}}>
+      <div className="uk-card-header">
+        <h3 className="uk-card-title">
+          {data.id} - {data.nome}
+        </h3>
         <p>
-          Proprietário(a): Jailson de Oliveira Soares / Irrigado: Sim / Cultivo
-          protegido: Não / Veiculos: 1 / Comercialização: PNAE, PAA, FEIRA
+          <strong>Proprietário(a):</strong> {data.proprietario} /{" "}
+          <strong>Irrigado:</strong> {data.irrigacao === true ? "Sim" : "Não"} /{" "}
+          <strong>Cultivo protegido:</strong>{" "}
+          {data.cultivo_protegido === true ? "Sim" : "Não"} /{" "}
+          <strong>Veiculos:</strong> {data.veiculos} /{" "}
+          <strong>Comercialização:</strong> {data.comercializacao}
         </p>
-        <p></p>
+      </div>
+      <div className="uk-card-body">
         <table className="uk-table uk-table-divider uk-table-small">
-          <tbody>
+          <thead>
             <tr>
               <th>Produto</th>
+              <th>Ano</th>
               <th>Jan</th>
               <th>Fev</th>
               <th>Mar</th>
@@ -28,107 +65,28 @@ const Table = () => {
               <th>Dez</th>
               <th>Total</th>
             </tr>
-            <tr>
-              <td>Cebolinha</td>
-              <td>0</td>
-              <td>0</td>
-              <td>10</td>
-              <td>10</td>
-              <td>10</td>
-              <td>10</td>
-              <td>10</td>
-              <td>10</td>
-              <td>10</td>
-              <td>10</td>
-              <td>10</td>
-              <td>10</td>
-              <td>100,00</td>
-            </tr>
-
-            <tr>
-              <td>Couve</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-              <td>12.5</td>
-              <td>12.5</td>
-              <td>12.5</td>
-              <td>12.5</td>
-              <td>12.5</td>
-              <td>12.5</td>
-              <td>12.5</td>
-              <td>12.5</td>
-              <td>0</td>
-              <td>100,00</td>
-            </tr>
-
-            <tr>
-              <td>Banana nanica</td>
-              <td>0</td>
-              <td>0</td>
-              <td>123</td>
-              <td>123</td>
-              <td>123</td>
-              <td>123</td>
-              <td>123</td>
-              <td>123</td>
-              <td>123</td>
-              <td>123</td>
-              <td>123</td>
-              <td>0</td>
-              <td>1107,00</td>
-            </tr>
-
-            <tr>
-              <td>Banana maçã</td>
-              <td>0</td>
-              <td>0</td>
-              <td>16.6</td>
-              <td>16.6</td>
-              <td>16.6</td>
-              <td>16.6</td>
-              <td>16.6</td>
-              <td>16.6</td>
-              <td>16.6</td>
-              <td>16.6</td>
-              <td>16.6</td>
-              <td>0</td>
-              <td>149,40</td>
-            </tr>
-
-            <tr>
-              <td>Salsa</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-              <td>2.77</td>
-              <td>2.77</td>
-              <td>2.77</td>
-              <td>2.77</td>
-              <td>2.77</td>
-              <td>2.77</td>
-              <td>2.77</td>
-              <td>2.77</td>
-              <td>2.77</td>
-              <td>24,93</td>
-            </tr>
-
-            <tr>
-              <td>Bovino</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-              <td>120.5</td>
-              <td>120.5</td>
-              <td>102.5</td>
-              <td>120.5</td>
-              <td>102.5</td>
-              <td>152.5</td>
-              <td>152.5</td>
-              <td>152.5</td>
-              <td>59</td>
-              <td>1083,00</td>
-            </tr>
+          </thead>
+          <tbody>
+            {data.products &&
+              data.products.map((product, index) => (
+                <tr key={index}>
+                  <td>{product.name}</td>
+                  <td>{product.year}</td>
+                  <td>{product.jan}</td>
+                  <td>{product.fev}</td>
+                  <td>{product.mar}</td>
+                  <td>{product.abr}</td>
+                  <td>{product.mai}</td>
+                  <td>{product.jun}</td>
+                  <td>{product.jul}</td>
+                  <td>{product.ago}</td>
+                  <td>{product.set}</td>
+                  <td>{product.out}</td>
+                  <td>{product.nov}</td>
+                  <td>{product.dez}</td>
+                  <td>100,00</td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

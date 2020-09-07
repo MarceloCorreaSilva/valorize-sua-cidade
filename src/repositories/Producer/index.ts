@@ -1,26 +1,31 @@
-import { doc } from "../../services/api";
+import { doc } from "../../services/google.spreadsheets";
+
+// API
+import api from "../../services/api";
 
 // Props
 export interface Producer {
-  id: any;
-  data_atualizacao: any;
-  tipo: any;
-  nome: any;
-  proprietario: any;
-  inscricao_estadual: any;
-  empregados: any;
-  area_total: any;
-  area_de_horta: any;
-  area_de_pomar: any;
-  irrigacao: any;
-  cultivo_protegido: any;
-  veiculos: any;
-  comercializacao: any;
-  latitude: any;
-  longitude: any;
+  id: string;
+  data_atualizacao: string;
+  tipo: string;
+  nome: string;
+  proprietario: string;
+  inscricao_estadual: string;
+  empregados: string;
+  area_total: string;
+  area_de_horta: string;
+  area_de_pomar: string;
+  irrigacao: boolean;
+  cultivo_protegido: boolean;
+  veiculos: number;
+  comercializacao: string;
+  latitude: string;
+  longitude: string;
 }
 
-const getAll = async () => {
+const URL_PRODUCERS = `${api.URL_BACKEND}/producers`;
+
+const loadData = async () => {
   await doc.loadInfo(); // loads document properties and worksheets
   //   console.log(doc.title);
 
@@ -74,19 +79,33 @@ const getAll = async () => {
   return itens;
 };
 
+const getAll = async () => {
+  return fetch(`${URL_PRODUCERS}?_embed=products`).then(async (response) => {
+    if (response.ok) {
+      const resposta = await response.json();
+      return resposta;
+    }
+
+    throw new Error("Não foi possível pegar os dados");
+  });
+};
+
 const create = async (producer: Producer) => {
-  const response = await fetch(`http://localhost:8000/producers`, {
+  const response = await fetch(`${URL_PRODUCERS}`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
     },
+
     body: JSON.stringify(producer),
   });
-  if (response.ok) {
-    const resposta = await response.json();
-    return resposta;
-  }
-  throw new Error("Não foi possível cadastrar os dados");
+
+  return response.status;
+  // if (response.ok) {
+  //   const resposta = await response.json();
+  //   return resposta;
+  // }
+  // throw new Error("Não foi possível cadastrar os dados");
 };
 
-export default { getAll, create };
+export default { loadData, getAll, create };

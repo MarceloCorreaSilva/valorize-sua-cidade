@@ -2,17 +2,14 @@ import React, { useState, useCallback, FormEvent, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { ValueType, OptionTypeBase as OptionType } from "react-select";
 
-// Repositories
-import producerRepository from "../../repositories/Producer";
-import productRepository from "../../repositories/Product";
-import highlighterRepository from "../../repositories/Highlighter";
-import georeferencingRepository from "../../repositories/Georeferencing";
-
 // Components
-import { Select, Checkbox, Button } from "../Html";
+import { Select, Checkbox, Button, Table } from "../Html";
 
 // Data
 import data from "../../data/data.json";
+
+// Repositories
+import producerRepository from "../../repositories/Producer";
 
 function FormSearch() {
   const [structures, setStructures] = useState([]);
@@ -23,7 +20,7 @@ function FormSearch() {
   const [coveredPlanting, setCoveredPlanting] = useState(false);
   const [irrigated, setIrrigated] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [producers, setProducers] = useState<{}[]>([]);
+  const [producers, setProducers] = useState([]);
 
   const handleClearSearchForm = useCallback(() => {
     setStructures([]);
@@ -35,23 +32,15 @@ function FormSearch() {
     setIrrigated(false);
   }, []);
 
-  // Google Spreadsheet
-  const handleSearchGoogleSpreadsheet = useCallback(async () => {
-    await producerRepository.getAll().then((response) => {
-      console.log(response);
-    });
-
-    await productRepository.getAll().then((response) => {
-      console.log(response);
-    });
-
-    await highlighterRepository.getAll().then((response) => {
-      console.log(response);
-    });
-
-    await georeferencingRepository.getAll().then((response) => {
-      console.log(response);
-    });
+  const handleSubmitSearchForm = useCallback(async () => {
+    producerRepository
+      .getAll()
+      .then((response) => {
+        setProducers(response);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }, []);
 
   return (
@@ -59,7 +48,7 @@ function FormSearch() {
       <form
         onSubmit={(event: FormEvent) => {
           event.preventDefault();
-          handleSearchGoogleSpreadsheet();
+          handleSubmitSearchForm();
 
           // console.log(structures);
         }}
@@ -216,7 +205,9 @@ function FormSearch() {
 
       <hr />
 
-      {producers && producers}
+      {producers && producers.map((producer, index) => (
+        <Table key={index} data={producer} />
+      ))}
     </>
   );
 }
