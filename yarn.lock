@@ -1537,6 +1537,19 @@
     pretty-format "^25.1.0"
     wait-for-expect "^3.0.2"
 
+"@testing-library/dom@^7.24.1":
+  version "7.24.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.24.1.tgz#0e8acd042070f2c1b183fbfe5c0d38b3194ad3c0"
+  integrity sha512-TemHWY59gvzcScGiE5eooZpzYk9GaED0TuuK4WefbIc/DQg0L5wOpnj7MIEeAGF3B7Ekf1kvmVnQ97vwz4Lmhg==
+  dependencies:
+    "@babel/code-frame" "^7.10.4"
+    "@babel/runtime" "^7.10.3"
+    "@types/aria-query" "^4.2.0"
+    aria-query "^4.2.2"
+    chalk "^4.1.0"
+    dom-accessibility-api "^0.5.1"
+    pretty-format "^26.4.2"
+
 "@testing-library/jest-dom@^4.2.4":
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-4.2.4.tgz#00dfa0cbdd837d9a3c2a7f3f0a248ea6e7b89742"
@@ -1662,10 +1675,22 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
+"@types/google-maps@*":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@types/google-maps/-/google-maps-3.2.2.tgz#aa97b0880be787d7fb04662707e36125c2e6e2d8"
+  integrity sha512-/XPVfS28VzUdE/HlmBRoe5ii1nNMyWujyRfRY08bD/JgmPlWSiY8enB2dqTe9mlc3kULq7LfFa1wcupM+lQfqA==
+  dependencies:
+    "@types/googlemaps" "*"
+
 "@types/google-spreadsheet@^3.0.1":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@types/google-spreadsheet/-/google-spreadsheet-3.0.1.tgz#0039dcdde826b8b030049d0a49107bfc7da4e746"
   integrity sha512-JYBEoUZF9oxR7nE90kxCJyD9B0nRHjOeOrjWRYr37bXvs4EAk2l/sAq8CJv7wdco6WcHcLbR7emNNVOVQu8zLw==
+
+"@types/googlemaps@*", "@types/googlemaps@^3.39.13":
+  version "3.39.13"
+  resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.39.13.tgz#a2649ac618cb15bd04ad8700c41693c8c1f90e21"
+  integrity sha512-R/k5WKe8zQHo9oFRINuX/1haKYRkKEfItnBGrSjspbXXITakRdsj6daQIdL1+Pt84lnzduWurxNA5k0fgPMQUg==
 
 "@types/history@*":
   version "4.7.7"
@@ -1724,6 +1749,13 @@
   dependencies:
     "@types/connect" "*"
     "@types/express" "*"
+
+"@types/markerclustererplus@2.1.29":
+  version "2.1.29"
+  resolved "https://registry.yarnpkg.com/@types/markerclustererplus/-/markerclustererplus-2.1.29.tgz#99367530c467678410e59c1c44266c60b3e963a4"
+  integrity sha512-Ffx4C8Y5E3uohPf2tGB7COJPvHgPDhXsT7LMNm+kT0HMnWWVYofg8uZUxB5ZRU2YK1bffH+z0u4lyRPj4NVv6w==
+  dependencies:
+    "@types/google-maps" "*"
 
 "@types/mime@*":
   version "2.0.3"
@@ -3107,9 +3139,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001020, caniuse-lite@^1.0.30001035:
-  version "1.0.30001035"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001035.tgz#2bb53b8aa4716b2ed08e088d4dc816a5fe089a1e"
-  integrity sha512-C1ZxgkuA4/bUEdMbU5WrGY4+UhMFFiXrgNAfxiMIqWgFTWfv/xsZCS2xEHT2LMq7xAZfuAnu6mcqyDl0ZR6wLQ==
+  version "1.0.30001124"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001124.tgz"
+  integrity sha512-zQW8V3CdND7GHRH6rxm6s59Ww4g/qGWTheoboW9nfeMg7sUoopIfKCcNZUjwYRCOrvereh3kwDpZj4VLQ7zGtA==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -3156,7 +3188,7 @@ chalk@^3.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^4.0.0:
+chalk@^4.0.0, chalk@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.0.tgz#4e14870a618d9e2edd97dd8345fd9d9dc315646a"
   integrity sha512-qwx12AxXe2Q5xQ43Ac//I6v5aXTipYrSESdOgzrN+9XjgEpyjpKuvSGaN4qE93f7TQTlerQQ8S+EQ0EyDoVL1A==
