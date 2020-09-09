@@ -4,12 +4,14 @@ import { ValueType, OptionTypeBase as OptionType } from "react-select";
 
 // Components
 import { Select, Checkbox, Button, Table } from "../Html";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Map from "../Map";
 
 // Data
 import data from "../../data/data.json";
 
 // Repositories
-import producerRepository from "../../repositories/Producer";
+import producerRepository, { Producer } from "../../repositories/Producer";
 
 function FormSearch() {
   const [structures, setStructures] = useState([]);
@@ -20,7 +22,7 @@ function FormSearch() {
   const [coveredPlanting, setCoveredPlanting] = useState(false);
   const [irrigated, setIrrigated] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [producers, setProducers] = useState([]);
+  const [producers, setProducers] = useState<Producer[]>([]);
 
   const handleClearSearchForm = useCallback(() => {
     setStructures([]);
@@ -33,14 +35,10 @@ function FormSearch() {
   }, []);
 
   const handleSubmitSearchForm = useCallback(async () => {
-    producerRepository
-      .getAll()
-      .then((response) => {
-        setProducers(response);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    producerRepository.getAll().then((response) => {
+      setProducers(response);
+      console.log(response);
+    });
   }, []);
 
   return (
@@ -205,9 +203,12 @@ function FormSearch() {
 
       <hr />
 
-      {producers && producers.map((producer, index) => (
-        <Table key={index} data={producer} />
-      ))}
+      {/* <Map /> */}
+
+      {producers &&
+        producers.map((producer: Producer, index: number) => (
+          <Table key={index} data={producer} />
+        ))}
     </>
   );
 }
