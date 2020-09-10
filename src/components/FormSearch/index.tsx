@@ -12,6 +12,9 @@ import data from "../../data/data.json";
 
 // Repositories
 import producerRepository, { Producer } from "../../repositories/Producer";
+import productRepository, { Product } from "../../repositories/Product";
+import highlighterRepository, { Highlighter } from '../../repositories/Highlighter'
+import georeferencingRepository, { Georeferencing } from '../../repositories/Georeferencing'
 
 function FormSearch() {
   const [structures, setStructures] = useState([]);
@@ -23,6 +26,9 @@ function FormSearch() {
   const [irrigated, setIrrigated] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [producers, setProducers] = useState<Producer[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [highlighter, setHighlighter] = useState<Highlighter[]>([]);
+  const [georeferencing, setGeoreferencing] = useState<Georeferencing[]>([]);
 
   const handleClearSearchForm = useCallback(() => {
     setStructures([]);
@@ -37,7 +43,22 @@ function FormSearch() {
   const handleSubmitSearchForm = useCallback(async () => {
     producerRepository.getAll().then((response) => {
       setProducers(response);
-      console.log(response);
+      console.log('Produtores', response);
+    });
+
+    productRepository.getAll().then((response) => {
+      setProducts(response);
+      console.log('Produtos', response);
+    });
+
+    highlighterRepository.getAll().then((response) => {
+      setHighlighter(response);
+      console.log('Marcadores', response);
+    });
+
+    georeferencingRepository.getAll().then((response) => {
+      setGeoreferencing(response);
+      console.log('Georeferenciamento', response);
     });
   }, []);
 

@@ -28,27 +28,27 @@ const getAll = async () => {
   });
 
   // eslint-disable-next-line array-callback-return
-  itens.map((item) => {
-    create(item);
-  });
+  // itens.map((item) => {
+  //   create(item);
+  // });
 
   return itens;
 };
 
-const create = async (georeferencing: Georeferencing) => {
-  const response = await fetch(`http://localhost:8000/georeferencing`, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(georeferencing),
-  });
-  return response.status;
-  // if (response.ok) {
-  //   const resposta = await response.json();
-  //   return resposta;
-  // }
-  // throw new Error("Não foi possível cadastrar os dados");
-};
+// const create = async (georeferencing: Georeferencing) => {
+//   const response = await fetch(`http://localhost:8000/georeferencing`, {
+//     method: "POST",
+//     headers: {
+//       "Content-type": "application/json",
+//     },
+//     body: JSON.stringify(georeferencing),
+//   });
+//   return response.status;
+//   if (response.ok) {
+//     const resposta = await response.json();
+//     return resposta;
+//   }
+//   throw new Error("Não foi possível cadastrar os dados");
+// };
 
-export default { getAll, create };
+export default { getAll };
