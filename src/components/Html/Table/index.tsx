@@ -10,22 +10,22 @@ export interface TableProps {
     cultivo_protegido: boolean;
     veiculos: number;
     comercializacao: string;
-    // products: {
-    //   name: string;
-    //   year: number;
-    //   jan: number;
-    //   fev: number;
-    //   mar: number;
-    //   abr: number;
-    //   mai: number;
-    //   jun: number;
-    //   jul: number;
-    //   ago: number;
-    //   set: number;
-    //   out: number;
-    //   nov: number;
-    //   dez: number;
-    // }[];
+    produtos: {
+      name: string;
+      year: number;
+      jan: number;
+      fev: number;
+      mar: number;
+      abr: number;
+      mai: number;
+      jun: number;
+      jul: number;
+      ago: number;
+      set: number;
+      out: number;
+      nov: number;
+      dez: number;
+    }[];
   };
 }
 
@@ -68,8 +68,8 @@ const Table: React.FC<TableProps> = ({ data }) => {
               </tr>
             </thead>
             <tbody>
-              {/* {data.products &&
-                data.products.map((product, index) => (
+              {data.produtos &&
+                data.produtos.map((product, index) => (
                   <tr key={index}>
                     <td>{product.name}</td>
                     <td>{product.year}</td>
@@ -87,7 +87,7 @@ const Table: React.FC<TableProps> = ({ data }) => {
                     <td>{product.dez}</td>
                     <td>100,00</td>
                   </tr>
-                ))} */}
+                ))}
             </tbody>
           </table>
         </div>

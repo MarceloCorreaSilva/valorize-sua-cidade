@@ -1,4 +1,5 @@
 import { doc } from "../../services/google.spreadsheets";
+import { Product } from "../Product";
 
 // API
 // import api from "../../services/api";
@@ -21,6 +22,7 @@ export interface Producer {
   comercializacao: string;
   latitude: string;
   longitude: string;
+  produtos: Product[];
 }
 
 // const URL_PRODUCERS = `${api.URL_BACKEND}/producers`;
@@ -34,40 +36,40 @@ const getAll = async () => {
   const rows = await sheet.getRows();
   const itens = rows.map(
     ({
-      id,
-      data_atualizacao,
-      tipo,
-      nome,
-      proprietario,
-      inscricao_estadual,
-      empregados,
-      area_total,
-      area_de_horta,
-      area_de_pomar,
-      irrigacao,
-      cultivo_protegido,
-      veiculos,
-      comercializacao,
-      latitude,
-      longitude,
+      ID,
+      DataAtualização,
+      Tipo,
+      Nome,
+      Proprietário,
+      InscriçãoEstadual,
+      Empregados,
+      AreaTotal,
+      AreaDeHorta,
+      AreaDePomar,
+      Irrigação,
+      CultivoProtegido,
+      Veiculos,
+      Comercialização,
+      Latitude,
+      Longitude,
     }) => {
       return {
-        id,
-        data_atualizacao,
-        tipo,
-        nome,
-        proprietario,
-        inscricao_estadual,
-        empregados,
-        area_total,
-        area_de_horta,
-        area_de_pomar,
-        irrigacao,
-        cultivo_protegido,
-        veiculos,
-        comercializacao,
-        latitude,
-        longitude,
+        id: ID,
+        data_atualizacao: DataAtualização,
+        tipo: Tipo,
+        nome: Nome,
+        proprietario: Proprietário,
+        inscricao_estadual: InscriçãoEstadual,
+        empregados: Empregados,
+        area_total: AreaTotal,
+        area_de_horta: AreaDeHorta,
+        area_de_pomar: AreaDePomar,
+        irrigacao: Irrigação,
+        cultivo_protegido: CultivoProtegido,
+        veiculos: Veiculos,
+        comercializacao: Comercialização,
+        latitude: Latitude,
+        longitude: Longitude,
       } as Producer;
     }
   );

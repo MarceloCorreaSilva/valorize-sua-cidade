@@ -1,4 +1,11 @@
-import React, { useState, useCallback, FormEvent, ChangeEvent } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, {
+  useState,
+  useCallback,
+  FormEvent,
+  ChangeEvent,
+  useEffect,
+} from "react";
 import { Link } from "react-router-dom";
 import { ValueType, OptionTypeBase as OptionType } from "react-select";
 
@@ -13,8 +20,12 @@ import data from "../../data/data.json";
 // Repositories
 import producerRepository, { Producer } from "../../repositories/Producer";
 import productRepository, { Product } from "../../repositories/Product";
-import highlighterRepository, { Highlighter } from '../../repositories/Highlighter'
-import georeferencingRepository, { Georeferencing } from '../../repositories/Georeferencing'
+import highlighterRepository, {
+  Highlighter,
+} from "../../repositories/Highlighter";
+import georeferencingRepository, {
+  Georeferencing,
+} from "../../repositories/Georeferencing";
 
 function FormSearch() {
   const [structures, setStructures] = useState([]);
@@ -24,11 +35,80 @@ function FormSearch() {
   const [commercializations, setCommercializations] = useState([]);
   const [coveredPlanting, setCoveredPlanting] = useState(false);
   const [irrigated, setIrrigated] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+  //
+  const [dbProducers, setDbProducers] = useState<Producer[]>([]);
+  const [dbProducts, setDbProducts] = useState<Product[]>([]);
+  const [dbHighlighter, setDbHighlighter] = useState<Highlighter[]>([]);
+  const [dbGeoreferencing, setDbGeoreferencing] = useState<Georeferencing[]>(
+    []
+  );
+
+  //
   const [producers, setProducers] = useState<Producer[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [highlighter, setHighlighter] = useState<Highlighter[]>([]);
   const [georeferencing, setGeoreferencing] = useState<Georeferencing[]>([]);
+
+  useEffect(() => {
+    const loadDataSpreadsheetsFromGoogle = () => {
+      producerRepository
+        .getAll()
+        .then((response) => {
+          setDbProducers(response);
+          console.log("Produtores");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      productRepository
+        .getAll()
+        .then((response) => {
+          setDbProducts(response);
+          console.log("Produtos");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      highlighterRepository
+        .getAll()
+        .then((response) => {
+          setDbHighlighter(response);
+          console.log("Marcadores");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      georeferencingRepository
+        .getAll()
+        .then((response) => {
+          setDbGeoreferencing(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+    loadDataSpreadsheetsFromGoogle();
+  }, []);
+
+  const loadSpecificProductsFromProducers = useCallback(() => {
+    let newProducers = dbProducers.map((producer: Producer) => {
+      return {
+        ...producer,
+        produtos: dbProducts.filter(
+          (product: Product) => product.producerId === producer.id
+        ),
+      };
+    });
+
+    setProducers(newProducers);
+
+    console.log(newProducers);
+  }, [dbProducers, dbProducts]);
 
   const handleClearSearchForm = useCallback(() => {
     setStructures([]);
@@ -38,29 +118,19 @@ function FormSearch() {
     setCommercializations([]);
     setCoveredPlanting(false);
     setIrrigated(false);
+
+    setProducers([]);
   }, []);
 
-  const handleSubmitSearchForm = useCallback(async () => {
-    producerRepository.getAll().then((response) => {
-      setProducers(response);
-      console.log('Produtores', response);
+  const handleSubmitSearchForm = useCallback(() => {
+    loadSpecificProductsFromProducers();
+
+    // eslint-disable-next-line array-callback-return
+    producers && producers.map((producer: Producer) => {
+      console.log('Producer', producer);
     });
 
-    productRepository.getAll().then((response) => {
-      setProducts(response);
-      console.log('Produtos', response);
-    });
-
-    highlighterRepository.getAll().then((response) => {
-      setHighlighter(response);
-      console.log('Marcadores', response);
-    });
-
-    georeferencingRepository.getAll().then((response) => {
-      setGeoreferencing(response);
-      console.log('Georeferenciamento', response);
-    });
-  }, []);
+  }, [loadSpecificProductsFromProducers, producers]);
 
   return (
     <>
