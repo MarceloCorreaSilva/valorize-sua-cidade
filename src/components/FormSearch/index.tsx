@@ -19,7 +19,10 @@ import data from "../../data/data.json";
 
 // Repositories
 import producerRepository, { Producer } from "../../repositories/Producer";
-import productRepository, { Product } from "../../repositories/Product";
+import productRepository, {
+  Product,
+  ProductionOfTheMonth,
+} from "../../repositories/Product";
 import highlighterRepository, {
   Highlighter,
 } from "../../repositories/Highlighter";
@@ -27,12 +30,17 @@ import georeferencingRepository, {
   Georeferencing,
 } from "../../repositories/Georeferencing";
 
+interface Filter {
+  value: string;
+  label: string;
+}
+
 function FormSearch() {
   const [structures, setStructures] = useState([]);
-  const [months, setMonths] = useState([]);
-  const [livestocks, setLivestocks] = useState([]);
-  const [productions, setProductions] = useState([]);
-  const [commercializations, setCommercializations] = useState([]);
+  const [months, setMonths] = useState<Filter[]>([]);
+  const [livestocks, setLivestocks] = useState<Filter[]>([]);
+  const [productions, setProductions] = useState<Filter[]>([]);
+  const [commercializations, setCommercializations] = useState<Filter[]>([]);
   const [coveredPlanting, setCoveredPlanting] = useState(false);
   const [irrigated, setIrrigated] = useState(false);
 
@@ -50,51 +58,66 @@ function FormSearch() {
   const [highlighter, setHighlighter] = useState<Highlighter[]>([]);
   const [georeferencing, setGeoreferencing] = useState<Georeferencing[]>([]);
 
+  // Load Data From Google Spreadsheets
   useEffect(() => {
     const loadDataSpreadsheetsFromGoogle = () => {
-      producerRepository
-        .getAll()
-        .then((response) => {
-          setDbProducers(response);
-          console.log("Produtores");
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
       productRepository
         .getAll()
         .then((response) => {
           setDbProducts(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
           console.log("Produtos");
-        })
-        .catch((error) => {
-          console.error(error);
         });
 
-      highlighterRepository
+      producerRepository
         .getAll()
         .then((response) => {
-          setDbHighlighter(response);
-          console.log("Marcadores");
+          setDbProducers(response);
         })
         .catch((error) => {
           console.error(error);
+        })
+        .finally(() => {
+          console.log("Produtores");
         });
 
-      georeferencingRepository
-        .getAll()
-        .then((response) => {
-          setDbGeoreferencing(response);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      // highlighterRepository
+      //   .getAll()
+      //   .then((response) => {
+      //     setDbHighlighter(response);
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   })
+      //   .finally(() => {
+      //     console.log("Marcadores");
+      //   });
+
+      // georeferencingRepository
+      //   .getAll()
+      //   .then((response) => {
+      //     setDbGeoreferencing(response);
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   })
+      //   .finally(() => {
+      //     console.log("Georeferenciamento");
+      //   });
     };
 
     loadDataSpreadsheetsFromGoogle();
   }, []);
 
+  useEffect(() => {
+    console.log(producers);
+  }, [producers]);
+
+  // Load Producer Specific Products
   const loadSpecificProductsFromProducers = useCallback(() => {
     let newProducers = dbProducers.map((producer: Producer) => {
       return {
@@ -106,10 +129,12 @@ function FormSearch() {
     });
 
     setProducers(newProducers);
-
-    console.log(newProducers);
   }, [dbProducers, dbProducts]);
 
+  // Performs Query Based On Filters
+  const performsQueryBasedOnFilters = useCallback(() => {}, []);
+
+  // Clear Search Form
   const handleClearSearchForm = useCallback(() => {
     setStructures([]);
     setMonths([]);
@@ -122,15 +147,137 @@ function FormSearch() {
     setProducers([]);
   }, []);
 
+  // Submit Search Form
   const handleSubmitSearchForm = useCallback(() => {
-    loadSpecificProductsFromProducers();
-
-    // eslint-disable-next-line array-callback-return
-    producers && producers.map((producer: Producer) => {
-      console.log('Producer', producer);
+    // loadSpecificProductsFromProducers();
+    let producersWithProducts = dbProducers.map((producer: Producer) => {
+      return {
+        ...producer,
+        produtos: dbProducts.filter(
+          (product: Product) => product.producerId === producer.id
+        ),
+      };
     });
 
-  }, [loadSpecificProductsFromProducers, producers]);
+    if (
+      structures.length === 0 &&
+      livestocks.length === 0 &&
+      commercializations.length === 0 &&
+      months.length === 0 &&
+      productions.length === 0 &&
+      coveredPlanting === false &&
+      irrigated === false
+    ) {
+      setProducers(producersWithProducts);
+    } else {
+      // List filters
+      let filterCommercializations: any[] = [];
+      if (commercializations && commercializations.length > 0) {
+        filterCommercializations = commercializations.map((item) => item.value);
+        console.log(filterCommercializations);
+      }
+
+      let filterLivestocks: any[] = [];
+      if (livestocks && livestocks.length > 0) {
+        livestocks.map((item) => filterLivestocks.push(item.value));
+        console.log(filterLivestocks);
+      }
+
+      let filterProductions: any[] = [];
+      if (productions && productions.length > 0) {
+        productions.map((item) => filterProductions.push(item.value));
+        console.log(filterProductions);
+      }
+
+      let filterMonths: any[] = [];
+      if (months && months.length > 0) {
+        filterMonths = months.map((item) => item.value);
+      }
+
+      // Production Filter
+      let producersWithProductionFilter = producersWithProducts
+        .map((producer: Producer) => {
+          let newProducts = producer.produtos.filter(
+            (product: Product) =>
+              filterProductions.includes(product.name) === true
+          );
+          return { ...producer, produtos: newProducts };
+        })
+        .filter((producer: Producer) => producer.produtos.length > 0)
+        .filter((producer: Producer) =>
+          producer.irrigacao === irrigated ? producer : null
+        )
+        .filter((producer: Producer) =>
+          producer.cultivo_protegido === coveredPlanting ? producer : null
+        )
+        .filter((producer: Producer) => {
+          return filterCommercializations.map((item) =>
+            producer.comercializacao.indexOf(item) > -1 ? producer : null
+          );
+        });
+
+      // Livestock Filter
+      let producersWithLivestockFilter = producersWithProducts
+        .map((producer: Producer) => {
+          let newProducts = producer.produtos.filter(
+            (product: Product) =>
+              filterLivestocks.includes(product.name) === true
+          );
+          return { ...producer, produtos: newProducts };
+        })
+        .filter((producer: Producer) => producer.produtos.length > 0)
+        .filter((producer: Producer) =>
+          filterCommercializations.map((item) =>
+            producer.comercializacao.includes(item)
+          )
+        );
+
+      // Livestock and Production Filter
+      let producersLivestockAndProduction = producersWithProductionFilter.concat(
+        producersWithLivestockFilter
+      );
+
+      // Livestock and Month Filter
+      let producersWithMonthFilter = producersWithProductionFilter.filter(
+        (producer: Producer) => {
+          // Products With Month Filter
+          let productsWithMonthFilter = producer.produtos.filter(
+            (product: Product) => {
+              // Month with Positive Production
+              let monthsWithProduction = product.months.filter(
+                (month) => month.total > 0
+              );
+              // Filtered Based on the Filter
+              let filteredProducts = monthsWithProduction
+                .map((production) =>
+                  filterMonths.includes(production.month) === true
+                    ? product
+                    : null
+                )
+                .filter((product) => product);
+
+              return filteredProducts.length > 0 ? product : null;
+            }
+          );
+          // console.log("productsWithMonthFilter: ", productsWithMonthFilter);
+          return { ...producer, produtos: productsWithMonthFilter };
+        }
+      );
+
+      console.log("Producers: ", producersWithMonthFilter);
+      setProducers(producersLivestockAndProduction);
+    }
+  }, [
+    commercializations,
+    coveredPlanting,
+    dbProducers,
+    dbProducts,
+    irrigated,
+    livestocks,
+    months,
+    productions,
+    structures,
+  ]);
 
   return (
     <>
@@ -138,8 +285,6 @@ function FormSearch() {
         onSubmit={(event: FormEvent) => {
           event.preventDefault();
           handleSubmitSearchForm();
-
-          // console.log(structures);
         }}
       >
         <fieldset className="uk-fieldset">

@@ -19,7 +19,7 @@ export interface Producer {
   irrigacao: boolean;
   cultivo_protegido: boolean;
   veiculos: number;
-  comercializacao: string;
+  comercializacao: string[];
   latitude: string;
   longitude: string;
   produtos: Product[];
@@ -64,10 +64,10 @@ const getAll = async () => {
         area_total: AreaTotal,
         area_de_horta: AreaDeHorta,
         area_de_pomar: AreaDePomar,
-        irrigacao: Irrigação,
-        cultivo_protegido: CultivoProtegido,
+        irrigacao: Irrigação === "1" ? true : false,
+        cultivo_protegido: CultivoProtegido === "1" ? true : false,
         veiculos: Veiculos,
-        comercializacao: Comercialização,
+        comercializacao: Comercialização.replaceAll(' ', '').split(','),
         latitude: Latitude,
         longitude: Longitude,
       } as Producer;

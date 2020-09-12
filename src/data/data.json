@@ -1,47 +1,47 @@
 {
     "months": [
         {
-            "value": "janeiro",
+            "value": "jan",
             "label": "Janeiro"
         },
         {
-            "value": "fevereiro",
+            "value": "fev",
             "label": "Fevereiro"
         },
         {
-            "value": "marco",
+            "value": "mar",
             "label": "Março"
         },
         {
-            "value": "abril",
+            "value": "abr",
             "label": "Abril"
         },
         {
-            "value": "maio",
+            "value": "mai",
             "label": "Maio"
         },
         {
-            "value": "junho",
+            "value": "jun",
             "label": "Junho"
         },
         {
-            "value": "julho",
+            "value": "jul",
             "label": "Julho"
         },
         {
-            "value": "agosto",
+            "value": "ago",
             "label": "Agosto"
         },
         {
-            "value": "setembro",
+            "value": "set",
             "label": "Setembro"
         },
         {
-            "value": "outubro",
+            "value": "out",
             "label": "Outubro"
         },
         {
-            "value": "novembro",
+            "value": "nov",
             "label": "Novembro"
         },
         {
@@ -59,7 +59,7 @@
             "label": "PNAE"
         },
         {
-            "value": "Feira",
+            "value": "FEIRA",
             "label": "Feira"
         }
     ],

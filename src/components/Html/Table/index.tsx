@@ -9,10 +9,11 @@ export interface TableProps {
     irrigacao: boolean;
     cultivo_protegido: boolean;
     veiculos: number;
-    comercializacao: string;
+    comercializacao: string[];
     produtos: {
       name: string;
       year: number;
+      months: {};
       jan: number;
       fev: number;
       mar: number;
@@ -42,7 +43,7 @@ const Table: React.FC<TableProps> = ({ data }) => {
           <strong>Cultivo protegido:</strong>{" "}
           {data.cultivo_protegido === true ? "Sim" : "Não"} /{" "}
           <strong>Veiculos:</strong> {data.veiculos} /{" "}
-          <strong>Comercialização:</strong> {data.comercializacao}
+          <strong>Comercialização:</strong> {data.comercializacao.join(', ')}
         </p>
       </div>
       <div className="uk-card-body">

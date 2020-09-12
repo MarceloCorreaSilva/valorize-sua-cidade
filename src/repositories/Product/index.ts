@@ -1,10 +1,16 @@
 import { doc } from "../../services/google.spreadsheets";
 
 // Props
+export interface ProductionOfTheMonth {
+  month: string;
+  total: number;
+}
+
 export interface Product {
   producerId: number;
   name: string;
   year: number;
+  months: ProductionOfTheMonth[];
   jan: number;
   fev: number;
   mar: number;
@@ -44,21 +50,35 @@ const getAll = async () => {
       Dezembro,
     }) => {
       return {
-        'producerId': Produtor,
-        'name': Produto,
-        'year': Ano,
-        'jan': Janeiro,
-        'fev': Fevereiro,
-        'mar': Março,
-        'abr': Abril,
-        'mai': Maio,
-        'jun': Junho,
-        'jul': Julho,
-        'ago': Agosto,
-        'set': Setembro,
-        'out': Outubro,
-        'nov': Novembro,
-        'dez': Dezembro,
+        producerId: Produtor,
+        name: Produto,
+        year: Ano,
+        months: [
+          { month: "jan", total: Janeiro },
+          { month: "fev", total: Fevereiro },
+          { month: "mar", total: Março },
+          { month: "abr", total: Abril },
+          { month: "mai", total: Maio },
+          { month: "jun", total: Junho },
+          { month: "jul", total: Julho },
+          { month: "ago", total: Agosto },
+          { month: "set", total: Setembro },
+          { month: "out", total: Outubro },
+          { month: "nov", total: Novembro },
+          { month: "dez", total: Dezembro },
+        ],
+        jan: Janeiro,
+        fev: Fevereiro,
+        mar: Março,
+        abr: Abril,
+        mai: Maio,
+        jun: Junho,
+        jul: Julho,
+        ago: Agosto,
+        set: Setembro,
+        out: Outubro,
+        nov: Novembro,
+        dez: Dezembro,
       };
     }
   );
