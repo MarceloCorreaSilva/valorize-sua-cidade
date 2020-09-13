@@ -12,7 +12,8 @@ import { ValueType, OptionTypeBase as OptionType } from "react-select";
 // Components
 import { Select, Checkbox, Button, Table } from "../Html";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import Map from "../Map";
+import GoogleMap from "../GoogleMaps";
+import LeafletMap from "../LeafletMaps";
 
 // Data
 import data from "../../data/data.json";
@@ -36,7 +37,8 @@ interface Filter {
 }
 
 function FormSearch() {
-  const [structures, setStructures] = useState([]);
+  // Filters
+  const [structures, setStructures] = useState<Filter[]>([]);
   const [months, setMonths] = useState<Filter[]>([]);
   const [livestocks, setLivestocks] = useState<Filter[]>([]);
   const [productions, setProductions] = useState<Filter[]>([]);
@@ -44,7 +46,7 @@ function FormSearch() {
   const [coveredPlanting, setCoveredPlanting] = useState(false);
   const [irrigated, setIrrigated] = useState(false);
 
-  //
+  // DB
   const [dbProducers, setDbProducers] = useState<Producer[]>([]);
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
   const [dbHighlighter, setDbHighlighter] = useState<Highlighter[]>([]);
@@ -55,67 +57,37 @@ function FormSearch() {
   //
   const [producers, setProducers] = useState<Producer[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [highlighter, setHighlighter] = useState<Highlighter[]>([]);
+  const [highlighters, setHighlighters] = useState<Highlighter[]>([]);
   const [georeferencing, setGeoreferencing] = useState<Georeferencing[]>([]);
 
-  // Load Data From Google Spreadsheets
   useEffect(() => {
-    const loadDataSpreadsheetsFromGoogle = () => {
-      productRepository
-        .getAll()
-        .then((response) => {
-          setDbProducts(response);
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => {
-          console.log("Produtos");
-        });
+    const producers = localStorage.getItem("producers");
+    if (producers) {
+      setDbProducers(JSON.parse(producers));
+      // setProducers(JSON.parse(producers));
+    }
 
-      producerRepository
-        .getAll()
-        .then((response) => {
-          setDbProducers(response);
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => {
-          console.log("Produtores");
-        });
+    const products = localStorage.getItem("products");
+    if (products) {
+      setDbProducts(JSON.parse(products));
+    }
 
-      // highlighterRepository
-      //   .getAll()
-      //   .then((response) => {
-      //     setDbHighlighter(response);
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //   })
-      //   .finally(() => {
-      //     console.log("Marcadores");
-      //   });
+    const highlighters = localStorage.getItem("highlighters");
+    if (highlighters) {
+      setDbHighlighter(JSON.parse(highlighters));
+      // setHighlighters(JSON.parse(highlighters));
+    }
 
-      // georeferencingRepository
-      //   .getAll()
-      //   .then((response) => {
-      //     setDbGeoreferencing(response);
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //   })
-      //   .finally(() => {
-      //     console.log("Georeferenciamento");
-      //   });
-    };
-
-    loadDataSpreadsheetsFromGoogle();
+    const georeferencing = localStorage.getItem("georeferencing");
+    if (georeferencing) {
+      setDbGeoreferencing(JSON.parse(georeferencing));
+    }
   }, []);
 
   useEffect(() => {
-    console.log(producers);
-  }, [producers]);
+    // console.log(producers);
+    // console.log(highlighters);
+  }, [highlighters, producers]);
 
   // Load Producer Specific Products
   const loadSpecificProductsFromProducers = useCallback(() => {
@@ -169,29 +141,36 @@ function FormSearch() {
       irrigated === false
     ) {
       setProducers(producersWithProducts);
+      setHighlighters(dbHighlighter);
     } else {
       // List filters
       let filterCommercializations: any[] = [];
       if (commercializations && commercializations.length > 0) {
         filterCommercializations = commercializations.map((item) => item.value);
-        console.log(filterCommercializations);
+        // console.log(filterCommercializations);
       }
 
       let filterLivestocks: any[] = [];
       if (livestocks && livestocks.length > 0) {
         livestocks.map((item) => filterLivestocks.push(item.value));
-        console.log(filterLivestocks);
+        // console.log(filterLivestocks);
       }
 
       let filterProductions: any[] = [];
       if (productions && productions.length > 0) {
         productions.map((item) => filterProductions.push(item.value));
-        console.log(filterProductions);
+        // console.log(filterProductions);
       }
 
       let filterMonths: any[] = [];
       if (months && months.length > 0) {
         filterMonths = months.map((item) => item.value);
+      }
+
+      let filterStructures: any[] = [];
+      if (structures && structures.length > 0) {
+        filterStructures = structures.map((item) => item.value);
+        // console.log(filterStructures);
       }
 
       // Production Filter
@@ -264,12 +243,23 @@ function FormSearch() {
         }
       );
 
-      console.log("Producers: ", producersWithMonthFilter);
+      // Structure Filter
+      let highlightersWithStructureFilter = dbHighlighter.filter(
+        (highlighter: Highlighter) => {
+          return filterStructures.includes(highlighter.type) === true
+            ? highlighter
+            : null;
+        }
+      );
+      // console.log("Filter: ", highlightersWithStructureFilter);
+
+      setHighlighters(highlightersWithStructureFilter);
       setProducers(producersLivestockAndProduction);
     }
   }, [
     commercializations,
     coveredPlanting,
+    dbHighlighter,
     dbProducers,
     dbProducts,
     irrigated,
@@ -439,7 +429,11 @@ function FormSearch() {
 
       <hr />
 
-      {/* <Map /> */}
+      <GoogleMap producers={producers} highlighters={highlighters}/>
+      <hr />
+
+      <LeafletMap producers={producers} highlighters={highlighters} />
+      <hr />
 
       {producers &&
         producers.map((producer: Producer, index: number) => (
