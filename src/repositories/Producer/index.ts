@@ -20,8 +20,8 @@ export interface Producer {
   cultivo_protegido: boolean;
   veiculos: number;
   comercializacao: string[];
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
   produtos: Product[];
 }
 
@@ -68,9 +68,9 @@ const getAll = async () => {
         cultivo_protegido: CultivoProtegido === "1" ? true : false,
         veiculos: Veiculos,
         comercializacao: Comercialização.replaceAll(' ', '').split(','),
-        latitude: Latitude,
-        longitude: Longitude,
-      } as Producer;
+        latitude: parseFloat(Latitude),
+        longitude: parseFloat(Longitude),
+      };
     }
   );
 

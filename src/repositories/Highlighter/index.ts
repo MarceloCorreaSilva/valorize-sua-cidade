@@ -5,10 +5,31 @@ export interface Highlighter {
   id: number;
   type: string;
   name: string;
-  lat: string;
-  lng: string;
+  lat: number;
+  lng: number;
   description: string;
+  icon: number;
 }
+
+const getIcon = (type: string) => {
+  if (type === "Ponte") {
+    return 0;
+  } else if (type === "Serviço") {
+    return 1;
+  } else if (type === "Mata-burro") {
+    return 2;
+  } else if (type === "Porteira") {
+    return 3;
+  } else if (type === "Silo") {
+    return 4;
+  } else if (type === "Tanque") {
+    return 5;
+  } else if (type === "Represa") {
+    return 6;
+  } else if (type === "Agroindústria") {
+    return 7;
+  }
+};
 
 const getAll = async () => {
   await doc.loadInfo(); // loads document properties and worksheets
@@ -19,12 +40,13 @@ const getAll = async () => {
   const itens = rows.map(
     ({ ID, Tipo, Nome, Latitude, Longitude, Descrição }) => {
       return {
-        'id': ID,
-        'type': Tipo,
-        'name': Nome,
-        'lat': Latitude,
-        'lng': Longitude,
-        'description': Descrição,
+        id: ID,
+        type: Tipo,
+        name: Nome,
+        lat: parseFloat(Latitude),
+        lng: parseFloat(Longitude),
+        description: Descrição,
+        icon: getIcon(Tipo),
       };
     }
   );

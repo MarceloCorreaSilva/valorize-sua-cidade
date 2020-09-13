@@ -23,6 +23,7 @@ export interface Product {
   out: number;
   nov: number;
   dez: number;
+  total: number;
 }
 
 const getAll = async () => {
@@ -48,6 +49,7 @@ const getAll = async () => {
       Outubro,
       Novembro,
       Dezembro,
+      Total
     }) => {
       return {
         producerId: Produtor,
@@ -79,6 +81,7 @@ const getAll = async () => {
         out: Outubro,
         nov: Novembro,
         dez: Dezembro,
+        total: Total
       };
     }
   );

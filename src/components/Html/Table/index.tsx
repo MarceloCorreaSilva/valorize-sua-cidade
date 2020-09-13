@@ -1,4 +1,5 @@
 import React from "react";
+import { ProductionOfTheMonth } from "../../../repositories/Product";
 
 // Props
 export interface TableProps {
@@ -13,7 +14,7 @@ export interface TableProps {
     produtos: {
       name: string;
       year: number;
-      months: {};
+      months: ProductionOfTheMonth[];
       jan: number;
       fev: number;
       mar: number;
@@ -26,6 +27,7 @@ export interface TableProps {
       out: number;
       nov: number;
       dez: number;
+      total: number;
     }[];
   };
 }
@@ -86,7 +88,7 @@ const Table: React.FC<TableProps> = ({ data }) => {
                     <td>{product.out}</td>
                     <td>{product.nov}</td>
                     <td>{product.dez}</td>
-                    <td>100,00</td>
+                    <td>{product.total}</td>
                   </tr>
                 ))}
             </tbody>
