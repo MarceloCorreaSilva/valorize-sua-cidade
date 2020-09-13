@@ -8,42 +8,82 @@ import Default from "../Layouts/Default";
 import FormSearch from "../../components/FormSearch";
 
 // Repositories
-// import producerRepository from "../../repositories/Producer";
-// import productRepository from "../../repositories/Product";
-// import highlighterRepository from "../../repositories/Highlighter";
-// import georeferencingRepository from "../../repositories/Georeferencing";
+import producerRepository from "../../repositories/Producer";
+import productRepository from "../../repositories/Product";
+import highlighterRepository from "../../repositories/Highlighter";
+import georeferencingRepository from "../../repositories/Georeferencing";
 
 function Home() {
-  // async function downloadDataGoogleSpreadsheets() {
-  //   await producerRepository.loadData().then((res) => {
-  //     console.log(res);
-  //   });
-  //   await productRepository.getAll();
-  //   await highlighterRepository.getAll();
-  //   await georeferencingRepository.getAll();
-  // }
-
+  // Load Data From Google Spreadsheets
   useEffect(() => {
-    // downloadDataGoogleSpreadsheets();
-    // accessSheet();
+    const loadDataSpreadsheetsFromGoogle = () => {
+      productRepository
+        .getAll()
+        .then((response) => {
+          localStorage.setItem("products", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log("Produtos");
+        });
 
-    // api
-    //   .get("/")
-    //   .then(function (response) {
-    //     // handle success
-    //     console.log(response.data);
+      producerRepository
+        .getAll()
+        .then((response) => {
+          localStorage.setItem("producers", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log("Produtores");
+        });
 
-    //     response.data.sheets.map((item: any) => {
-    //       return console.log(item);
-    //     });
-    //   })
-    //   .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //   })
-    //   .then(function () {
-    //     // always executed
-    //   });
+      highlighterRepository
+        .getAll()
+        .then((response) => {
+          localStorage.setItem("highlighters", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log("Marcadores");
+        });
+
+      georeferencingRepository
+        .getAll()
+        .then((response) => {
+          localStorage.setItem("georeferencing", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log("Georeferenciamento");
+        });
+    };
+
+    const lastUpdate = localStorage.getItem("lastUpdate");
+    const data = new Date();
+
+    if (lastUpdate) {
+      let dateFromStorage = Date.parse(JSON.parse(lastUpdate));
+      let actualDate = Date.parse(data.toISOString().split("T")[0]);
+
+      if (actualDate > dateFromStorage) {
+        localStorage.clear();
+        loadDataSpreadsheetsFromGoogle();
+      }
+    } else {
+      localStorage.setItem(
+        "lastUpdate",
+        JSON.stringify(data.toISOString().split("T")[0])
+      );
+      loadDataSpreadsheetsFromGoogle();
+    }
   }, []);
 
   return (
