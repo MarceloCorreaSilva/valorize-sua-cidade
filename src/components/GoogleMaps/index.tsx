@@ -21,7 +21,7 @@ const Map: React.FC<Props> = ({ producers, highlighters }) => {
   }, [highlighters]);
 
   return (
-    <LoadScript googleMapsApiKey="AIzaSyBXfldFNZ4WTjwn56GltKgQRL2XOam66yU">
+    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
       <GoogleMap
         mapContainerStyle={{
           width: "100%",
