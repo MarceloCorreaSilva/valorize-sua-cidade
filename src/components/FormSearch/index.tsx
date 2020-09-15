@@ -427,12 +427,23 @@ function FormSearch() {
         </fieldset>
       </form>
 
-      <hr />
+      <div
+        style={{
+          display: 'flex',
+          // gridTemplateColumns: '1fr 1fr',
+          // gridColumnGap: '10px',
+          justifyContent: "center",
+          alignContent: "center"
+          // padding: '10px'
+  // grid-template-columns: repeat(3, 1fr);
+  // grid-column-gap: 24px;
+        }}
+      >
+        <GoogleMap producers={producers} highlighters={highlighters} />
 
-      <GoogleMap producers={producers} highlighters={highlighters}/>
-      <hr />
+        <LeafletMap producers={producers} highlighters={highlighters} />
+      </div>
 
-      <LeafletMap producers={producers} highlighters={highlighters} />
       <hr />
 
       {producers &&

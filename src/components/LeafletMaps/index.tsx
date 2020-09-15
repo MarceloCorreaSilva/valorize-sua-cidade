@@ -45,7 +45,7 @@ const LeafletMaps: React.FC<Props> = ({ producers, highlighters }) => {
     <Map
       center={[-18.675444, -53.64186]}
       zoom={10}
-      style={{ width: "100%", height: "600px", opacity: "0.9" }}
+      style={{ width: "100%", height: "400px", opacity: "0.9" }}
     >
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

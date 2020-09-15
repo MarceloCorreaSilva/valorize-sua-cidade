@@ -25,7 +25,7 @@ const Map: React.FC<Props> = ({ producers, highlighters }) => {
       <GoogleMap
         mapContainerStyle={{
           width: "100%",
-          height: "600px",
+          height: "400px",
         }}
         center={{
           lat: -18.675444,
