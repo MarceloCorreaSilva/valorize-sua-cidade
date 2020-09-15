@@ -80,7 +80,7 @@ function FormSearch() {
 
     const georeferencing = sessionStorage.getItem("georeferencing");
     if (georeferencing) {
-      setDbGeoreferencing(JSON.parse(georeferencing));
+      setGeoreferencing(JSON.parse(georeferencing));
     }
   }, []);
 
@@ -427,22 +427,16 @@ function FormSearch() {
         </fieldset>
       </form>
 
-      <div
+      <GoogleMap producers={producers} highlighters={highlighters} geoJSON={georeferencing} />
+      {/* <div
         style={{
-          display: 'flex',
-          // gridTemplateColumns: '1fr 1fr',
-          // gridColumnGap: '10px',
+          display: "flex",
           justifyContent: "center",
-          alignContent: "center"
-          // padding: '10px'
-  // grid-template-columns: repeat(3, 1fr);
-  // grid-column-gap: 24px;
+          alignContent: "center",
         }}
       >
-        <GoogleMap producers={producers} highlighters={highlighters} />
-
         <LeafletMap producers={producers} highlighters={highlighters} />
-      </div>
+      </div> */}
 
       <hr />
 
