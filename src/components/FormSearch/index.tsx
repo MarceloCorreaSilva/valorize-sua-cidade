@@ -61,24 +61,24 @@ function FormSearch() {
   const [georeferencing, setGeoreferencing] = useState<Georeferencing[]>([]);
 
   useEffect(() => {
-    const producers = localStorage.getItem("producers");
+    const producers = sessionStorage.getItem("producers");
     if (producers) {
       setDbProducers(JSON.parse(producers));
       // setProducers(JSON.parse(producers));
     }
 
-    const products = localStorage.getItem("products");
+    const products = sessionStorage.getItem("products");
     if (products) {
       setDbProducts(JSON.parse(products));
     }
 
-    const highlighters = localStorage.getItem("highlighters");
+    const highlighters = sessionStorage.getItem("highlighters");
     if (highlighters) {
       setDbHighlighter(JSON.parse(highlighters));
       // setHighlighters(JSON.parse(highlighters));
     }
 
-    const georeferencing = localStorage.getItem("georeferencing");
+    const georeferencing = sessionStorage.getItem("georeferencing");
     if (georeferencing) {
       setDbGeoreferencing(JSON.parse(georeferencing));
     }

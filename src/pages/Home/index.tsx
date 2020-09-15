@@ -20,7 +20,7 @@ function Home() {
       productRepository
         .getAll()
         .then((response) => {
-          localStorage.setItem("products", JSON.stringify(response));
+          sessionStorage.setItem("products", JSON.stringify(response));
         })
         .catch((error) => {
           console.error(error);
@@ -32,7 +32,7 @@ function Home() {
       producerRepository
         .getAll()
         .then((response) => {
-          localStorage.setItem("producers", JSON.stringify(response));
+          sessionStorage.setItem("producers", JSON.stringify(response));
         })
         .catch((error) => {
           console.error(error);
@@ -44,7 +44,7 @@ function Home() {
       highlighterRepository
         .getAll()
         .then((response) => {
-          localStorage.setItem("highlighters", JSON.stringify(response));
+          sessionStorage.setItem("highlighters", JSON.stringify(response));
         })
         .catch((error) => {
           console.error(error);
@@ -56,7 +56,7 @@ function Home() {
       georeferencingRepository
         .getAll()
         .then((response) => {
-          localStorage.setItem("georeferencing", JSON.stringify(response));
+          sessionStorage.setItem("georeferencing", JSON.stringify(response));
         })
         .catch((error) => {
           console.error(error);
@@ -66,7 +66,7 @@ function Home() {
         });
     };
 
-    const lastUpdate = localStorage.getItem("lastUpdate");
+    const lastUpdate = sessionStorage.getItem("lastUpdate");
     const data = new Date();
 
     if (lastUpdate) {
@@ -74,11 +74,11 @@ function Home() {
       let actualDate = Date.parse(data.toISOString().split("T")[0]);
 
       if (actualDate > dateFromStorage) {
-        localStorage.clear();
+        sessionStorage.clear();
         loadDataSpreadsheetsFromGoogle();
       }
     } else {
-      localStorage.setItem(
+      sessionStorage.setItem(
         "lastUpdate",
         JSON.stringify(data.toISOString().split("T")[0])
       );
