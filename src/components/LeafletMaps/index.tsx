@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Icon } from "leaflet";
-import {
-  Map,
-  TileLayer,
-  Marker,
-  Popup,
-  Tooltip,
-  GeoJSON
-} from "react-leaflet";
+import { Map, TileLayer, Marker, Popup, Tooltip, GeoJSON } from "react-leaflet";
 import { Producer } from "../../repositories/Producer";
 import { Highlighter } from "../../repositories/Highlighter";
+import "leaflet/dist/leaflet.css";
 
+// Data
+import geojson from "../../data/geojson.json";
+
+// Icons SVG
 import bridge from "../../assets/icons/bridge.svg";
 import gate from "../../assets/icons/gate.svg";
 import services from "../../assets/icons/services.svg";
@@ -26,6 +24,9 @@ interface Props {
 }
 
 const LeafletMaps: React.FC<Props> = ({ producers, highlighters }) => {
+  // const [geoJSONOfTheMunicipality, setGeoJSONOfTheMunicipality] = useState(
+  //   geojson
+  // );
   const icons = [
     new Icon({ iconUrl: bridge, iconSize: [40, 40] }),
     new Icon({ iconUrl: services, iconSize: [40, 40] }),
@@ -51,6 +52,7 @@ const LeafletMaps: React.FC<Props> = ({ producers, highlighters }) => {
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      {/* <GeoJSON data={geojson.features} /> */}
 
       {producers &&
         producers.map((producer: Producer, key) => (
@@ -76,7 +78,6 @@ const LeafletMaps: React.FC<Props> = ({ producers, highlighters }) => {
             <Tooltip>{highlighter.type}</Tooltip>
           </Marker>
         ))}
-        <GeoJSON data={[]}></GeoJSON>
     </Map>
   );
 };

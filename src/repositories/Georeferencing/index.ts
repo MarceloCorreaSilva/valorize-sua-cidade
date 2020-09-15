@@ -1,5 +1,8 @@
 import { doc } from "../../services/google.spreadsheets";
 
+// Repositories
+import coordinateRepository from '../Coordinate'
+
 // Props
 export interface Georeferencing {
   id: number;
@@ -8,6 +11,24 @@ export interface Georeferencing {
   area: string;
   coordinates: string;
 }
+interface LatLng {
+  lat: number;
+  lng: number;
+}
+
+const toCoordinates = (coordinate: string) => {
+  const coords = coordinate
+    .replace(/\\n/g, "\\n")
+    .replace(/\\'/g, "\\'")
+    .replace(/\\"/g, '\\"')
+    .replace(/\\&/g, "\\&")
+    .replace(/\\r/g, "\\r")
+    .replace(/\\t/g, "\\t")
+    .replace(/\\b/g, "\\b")
+    .replace(/\\f/g, "\\f");
+
+  return coords;
+};
 
 const getAll = async () => {
   await doc.loadInfo(); // loads document properties and worksheets
@@ -23,14 +44,11 @@ const getAll = async () => {
       name: Nome,
       owner: Proprietário,
       area: Área,
-      coordinates: Coordenadas.replaceAll('"', '')
+      coordinates: Coordenadas,
     };
   });
 
-  // eslint-disable-next-line array-callback-return
-  // itens.map((item) => {
-  //   create(item);
-  // });
+  // console.log(typeof JSON.parse(itens[0].coordinates));
 
   return itens;
 };

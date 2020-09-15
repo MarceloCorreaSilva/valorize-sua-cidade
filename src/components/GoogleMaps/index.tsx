@@ -1,38 +1,147 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import React, { useEffect, useState } from "react";
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  Polygon,
+  InfoWindow,
+} from "@react-google-maps/api";
 
 // Components || Interfaces
 import { Producer } from "../../repositories/Producer";
 import { Highlighter } from "../../repositories/Highlighter";
+import { Georeferencing } from "../../repositories/Georeferencing";
+
+// Data
+import geojson from "../../data/geojson.json";
 
 interface Props {
   producers: Producer[];
   highlighters: Highlighter[];
+  geoJSON: Georeferencing[];
+}
+interface LatLng {
+  lat: number;
+  lng: number;
 }
 
-const Map: React.FC<Props> = ({ producers, highlighters }) => {
+const Map: React.FC<Props> = ({ producers, highlighters, geoJSON }) => {
+  const [geoJSONOfTheMunicipality, setGeoJSONOfTheMunicipality] = useState(
+    geojson
+  );
+
+  const renderGeoJSONOfTheMunicipality = () => {
+    let coordinates =
+      geoJSONOfTheMunicipality.features[0].geometry.coordinates[0];
+    let coordArr = Array<LatLng>();
+    coordinates.map((coordinate) =>
+      coordArr.push({ lat: coordinate[1], lng: coordinate[0] })
+    );
+    return (
+      <Polygon
+        path={coordArr}
+        options={{
+          strokeColor: "#fc1e0d",
+          strokeOpacity: 1,
+          strokeWeight: 2,
+        }}
+      />
+    );
+  };
+
+  const renderRegions = () => {
+    let geo = sessionStorage.getItem("georeferencing");
+    let geo2 = JSON.parse(geo ? geo : "");
+
+    geo2.map((region: Georeferencing) => {
+      let geo = region.coordinates
+        .replace(/\\n/g, "\\n")
+        .replace(/\\'/g, "\\'")
+        .replace(/\\"/g, '\\"')
+        .replace(/\\&/g, "\\&")
+        .replace(/\\r/g, "\\r")
+        .replace(/\\t/g, "\\t")
+        .replace(/\\b/g, "\\b")
+        .replace(/\\f/g, "\\f");
+      let coordinates = JSON.parse(geo);
+      let coordArr = Array<LatLng>();
+      return console.log(geo);
+    });
+
+    let geo3 = geo2[0].coordinates
+      .replace(/\\n/g, "\\n")
+      .replace(/\\'/g, "\\'")
+      .replace(/\\"/g, '\\"')
+      .replace(/\\&/g, "\\&")
+      .replace(/\\r/g, "\\r")
+      .replace(/\\t/g, "\\t")
+      .replace(/\\b/g, "\\b")
+      .replace(/\\f/g, "\\f");
+
+    let geo4 = JSON.parse(geo3);
+
+    let coordinates = geo4;
+    let coordArr = Array<LatLng>();
+    coordinates.map((coordinate: LatLng) =>
+      coordArr.push({ lat: coordinate.lat, lng: coordinate.lng })
+    );
+
+    console.log("DEBUG: ", coordArr);
+
+    return (
+      <Polygon
+        path={coordArr}
+        options={{
+          strokeColor: "#fc1e0d",
+          strokeOpacity: 1,
+          strokeWeight: 2,
+        }}
+      />
+    );
+
+    // =========================================
+    // geoJSON.map((region: Georeferencing) => {
+    //   let coordinates = JSON.parse(region.coordinates);
+    //   let coordArr = Array<LatLng>();
+    //   coordinates.map((coordinate: LatLng) => coordArr.push({lat: coordinate.lat, lng: coordinate.lng}))
+
+    //   return (
+    //     <Polygon
+    //       path={coordArr}
+    //       options={{
+    //         strokeColor: "#fc1e0d",
+    //         strokeOpacity: 1,
+    //         strokeWeight: 2,
+    //       }}
+    //     />
+    //   );
+    // });
+    // console.log(coordinates);
+  };
+
   const onLoad = (data: any) => {
     // console.log("data: ", data);
   };
 
-  useEffect(() => {
-    // console.log("highlighters: ", highlighters);
-  }, [highlighters]);
+  useEffect(() => {}, []);
 
   return (
     <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
       <GoogleMap
         mapContainerStyle={{
           width: "100%",
-          height: "400px",
+          height: "500px",
         }}
         center={{
           lat: -18.675444,
           lng: -53.64186,
         }}
-        zoom={10}
+        zoom={9}
       >
+        {renderGeoJSONOfTheMunicipality()}
+        {/* {renderRegions()} */}
+
         {highlighters &&
           highlighters.map((highlighter: Highlighter, key) => {
             return (
