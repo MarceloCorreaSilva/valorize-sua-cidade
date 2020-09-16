@@ -2,7 +2,7 @@
   "name": "valorize-sua-cidade",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://marcelocorreasilva.github.io/valorize-sua-cidade/",
+  "homepage": "https://valorize-sua-cidade.vercel.app/",
   "dependencies": {
     "@react-google-maps/api": "^1.10.1",
     "@testing-library/jest-dom": "^4.2.4",
