@@ -19,17 +19,14 @@ import geojson from "../../data/geojson.json";
 interface Props {
   producers: Producer[];
   highlighters: Highlighter[];
-  geoJSON: Georeferencing[];
 }
 interface LatLng {
   lat: number;
   lng: number;
 }
 
-const Map: React.FC<Props> = ({ producers, highlighters, geoJSON }) => {
-  const [geoJSONOfTheMunicipality, setGeoJSONOfTheMunicipality] = useState(
-    geojson
-  );
+const Map: React.FC<Props> = ({ producers, highlighters }) => {
+  const [geoJSONOfTheMunicipality, setGeoJSONOfTheMunicipality] = useState(geojson);
 
   const renderGeoJSONOfTheMunicipality = () => {
     let coordinates =
@@ -124,8 +121,6 @@ const Map: React.FC<Props> = ({ producers, highlighters, geoJSON }) => {
     // console.log("data: ", data);
   };
 
-  useEffect(() => {}, []);
-
   return (
     <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
       <GoogleMap
@@ -153,25 +148,7 @@ const Map: React.FC<Props> = ({ producers, highlighters, geoJSON }) => {
                   lat: highlighter.lat,
                   lng: highlighter.lng,
                 }}
-              >
-                {/* <InfoWindow
-                  onLoad={onLoad}
-                  position={{
-                    lat: highlighter.lat,
-                    lng: highlighter.lng,
-                  }}
-                >
-                  <div
-                    style={{
-                      background: `white`,
-                      border: `1px solid #ccc`,
-                      padding: 15,
-                    }}
-                  >
-                    <h1>{highlighter.name}</h1>
-                  </div>
-                </InfoWindow> */}
-              </Marker>
+              />
             );
           })}
 
