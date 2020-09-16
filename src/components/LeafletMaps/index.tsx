@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Icon } from "leaflet";
-import { Map, TileLayer, Marker, Popup, Tooltip, GeoJSON } from "react-leaflet";
+import { Map, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import { Producer } from "../../repositories/Producer";
 import { Highlighter } from "../../repositories/Highlighter";
 import "leaflet/dist/leaflet.css";
@@ -67,7 +67,7 @@ const LeafletMaps: React.FC<Props> = ({ producers, highlighters }) => {
           <Marker
             key={key}
             position={[highlighter.lat, highlighter.lng]}
-            icon={icons[highlighter.icon]}
+            // icon={icons[highlighter.icon]}
           >
             <Popup>
               <div>
