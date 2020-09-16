@@ -70,6 +70,7 @@ const getAll = async () => {
         comercializacao: Comercialização.replaceAll(' ', '').split(','),
         latitude: parseFloat(Latitude),
         longitude: parseFloat(Longitude),
+        produtos: []
       };
     }
   );

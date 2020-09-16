@@ -8,7 +8,7 @@ export interface Highlighter {
   lat: number;
   lng: number;
   description: string;
-  icon: number;
+  icon?: number;
 }
 
 const getIcon = (type: string) => {
