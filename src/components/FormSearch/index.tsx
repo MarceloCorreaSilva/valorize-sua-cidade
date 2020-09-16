@@ -20,16 +20,9 @@ import data from "../../data/data.json";
 
 // Repositories
 import producerRepository, { Producer } from "../../repositories/Producer";
-import productRepository, {
-  Product,
-  ProductionOfTheMonth,
-} from "../../repositories/Product";
-import highlighterRepository, {
-  Highlighter,
-} from "../../repositories/Highlighter";
-import georeferencingRepository, {
-  Georeferencing,
-} from "../../repositories/Georeferencing";
+import productRepository, { Product } from "../../repositories/Product";
+import highlighterRepository, { Highlighter } from "../../repositories/Highlighter";
+// import georeferencingRepository, { Georeferencing } from "../../repositories/Georeferencing";
 
 interface Filter {
   value: string;
@@ -50,15 +43,88 @@ function FormSearch() {
   const [dbProducers, setDbProducers] = useState<Producer[]>([]);
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
   const [dbHighlighter, setDbHighlighter] = useState<Highlighter[]>([]);
-  const [dbGeoreferencing, setDbGeoreferencing] = useState<Georeferencing[]>(
-    []
-  );
+  // const [dbGeoreferencing, setDbGeoreferencing] = useState<Georeferencing[]>([]);
 
   //
   const [producers, setProducers] = useState<Producer[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [highlighters, setHighlighters] = useState<Highlighter[]>([]);
-  const [georeferencing, setGeoreferencing] = useState<Georeferencing[]>([]);
+  // const [georeferencing, setGeoreferencing] = useState<Georeferencing[]>([]);
+
+  // Load Data From Google Spreadsheets
+  useEffect(() => {
+    const loadDataSpreadsheetsFromGoogle = () => {
+      productRepository
+        .getAll()
+        .then((response) => {
+          setDbProducts(response);
+          sessionStorage.setItem("products", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log("Produtos");
+        });
+
+      producerRepository
+        .getAll()
+        .then((response) => {
+          setDbProducers(response);
+          sessionStorage.setItem("producers", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log("Produtores");
+        });
+
+      highlighterRepository
+        .getAll()
+        .then((response) => {
+          setDbHighlighter(response);
+          sessionStorage.setItem("highlighters", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log("Marcadores");
+        });
+
+      // georeferencingRepository
+      //   .getAll()
+      //   .then((response) => {
+      //     sessionStorage.setItem("georeferencing", JSON.stringify(response));
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   })
+      //   .finally(() => {
+      //     console.log("Georeferenciamento");
+      //   });
+    };
+
+    const lastUpdate = sessionStorage.getItem("lastUpdate");
+    const data = new Date();
+
+    if (lastUpdate) {
+      let dateFromStorage = Date.parse(JSON.parse(lastUpdate));
+      let actualDate = Date.parse(data.toISOString().split("T")[0]);
+
+      if (actualDate > dateFromStorage) {
+        sessionStorage.clear();
+        loadDataSpreadsheetsFromGoogle();
+      }
+    } else {
+      sessionStorage.setItem(
+        "lastUpdate",
+        JSON.stringify(data.toISOString().split("T")[0])
+      );
+      loadDataSpreadsheetsFromGoogle();
+    }
+  }, []);
 
   useEffect(() => {
     const producers = sessionStorage.getItem("producers");
@@ -78,16 +144,18 @@ function FormSearch() {
       // setHighlighters(JSON.parse(highlighters));
     }
 
-    const georeferencing = sessionStorage.getItem("georeferencing");
-    if (georeferencing) {
-      setGeoreferencing(JSON.parse(georeferencing));
-    }
+    // const georeferencing = sessionStorage.getItem("georeferencing");
+    // if (georeferencing) {
+    //   setGeoreferencing(JSON.parse(georeferencing));
+    // }
   }, []);
 
   useEffect(() => {
-    // console.log(producers);
-    // console.log(highlighters);
-  }, [highlighters, producers]);
+    // const script = document.createElement("script");
+    // script.src = "js/content.js";
+    // script.async = true;
+    // document.body.appendChild(script);
+  }, []);
 
   // Load Producer Specific Products
   const loadSpecificProductsFromProducers = useCallback(() => {
@@ -182,7 +250,7 @@ function FormSearch() {
           );
           return { ...producer, produtos: newProducts };
         })
-        .filter((producer: Producer) => producer.produtos.length > 0)
+        .filter((producer: Producer) => producer.produtos?.length > 0)
         .filter((producer: Producer) =>
           producer.irrigacao === irrigated ? producer : null
         )
@@ -427,7 +495,7 @@ function FormSearch() {
         </fieldset>
       </form>
 
-      <GoogleMap producers={producers} highlighters={highlighters} geoJSON={georeferencing} />
+      <GoogleMap producers={producers} highlighters={highlighters} />
       {/* <div
         style={{
           display: "flex",
