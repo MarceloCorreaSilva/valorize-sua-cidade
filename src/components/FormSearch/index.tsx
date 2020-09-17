@@ -21,7 +21,9 @@ import data from "../../data/data.json";
 // Repositories
 import producerRepository, { Producer } from "../../repositories/Producer";
 import productRepository, { Product } from "../../repositories/Product";
-import highlighterRepository, { Highlighter } from "../../repositories/Highlighter";
+import highlighterRepository, {
+  Highlighter,
+} from "../../repositories/Highlighter";
 // import georeferencingRepository, { Georeferencing } from "../../repositories/Georeferencing";
 
 interface Filter {
@@ -495,18 +497,13 @@ function FormSearch() {
         </fieldset>
       </form>
 
-      <GoogleMap producers={producers} highlighters={highlighters} />
-      {/* <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignContent: "center",
-        }}
-      >
+      {process.env.REACT_APP_USE_GOOGLE_MAP === "true" ? (
+        <GoogleMap producers={producers} highlighters={highlighters} />
+      ) : (
         <LeafletMap producers={producers} highlighters={highlighters} />
-      </div> */}
+      )}
 
-      <hr />
+      {producers && producers.length > 0 && <hr />}
 
       {producers &&
         producers.map((producer: Producer, index: number) => (

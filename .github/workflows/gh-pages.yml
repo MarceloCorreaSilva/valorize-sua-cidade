@@ -21,6 +21,7 @@ jobs:
     env:
       REACT_APP_APP_NAME: "Valorize sua Cidade"
       REACT_APP_CITY_NAME: "Figueirão-MS"
+      REACT_APP_USE_GOOGLE_MAP: "false"
 
       REACT_APP_GOOGLE_SPREADSHEET: "1Pc-PWyBI--iY1q6CTbuefIChsSMDRGtZDN6JE3xXqVY"
       REACT_APP_GOOGLE_API_KEY: "AIzaSyBXfldFNZ4WTjwn56GltKgQRL2XOam66yU"
