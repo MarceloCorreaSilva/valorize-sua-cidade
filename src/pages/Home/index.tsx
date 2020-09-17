@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-// import api from "../../services/api-axios";
+import React from "react";
 
 // Layout
 import Default from "../Layouts/Default";
