@@ -25,5 +25,7 @@ yarn-error.log*
 
 # credentials
 /src/_credentials
+/src/services/_api-axios.ts
+/src/services/_api.ts
 
 .vercel
