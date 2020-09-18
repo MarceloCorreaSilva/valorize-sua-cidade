@@ -11,9 +11,9 @@ import { ValueType, OptionTypeBase as OptionType } from "react-select";
 
 // Components
 import { Select, Checkbox, Button, Table } from "../Html";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import GoogleMap from "../GoogleMaps";
 import LeafletMap from "../LeafletMaps";
+import Pagination from "../Pagination";
 
 // Data
 import data from "../../data/data.json";
@@ -52,6 +52,18 @@ function FormSearch() {
   const [products, setProducts] = useState<Product[]>([]);
   const [highlighters, setHighlighters] = useState<Highlighter[]>([]);
   // const [georeferencing, setGeoreferencing] = useState<Georeferencing[]>([]);
+
+  // Pagination
+  const [itemsOnPage, setItemsOnPage] = useState(4);
+  const [pagination, setPagination] = useState({
+    start: 0,
+    end: itemsOnPage,
+  });
+
+  const onPaginationChange = (start: number, end: number) => {
+    setPagination({ start: start, end: end });
+  };
+  // Pagination
 
   // Load Data From Google Spreadsheets
   useEffect(() => {
@@ -129,15 +141,15 @@ function FormSearch() {
   }, []);
 
   useEffect(() => {
+    const products = sessionStorage.getItem("products");
+    if (products) {
+      setDbProducts(JSON.parse(products));
+    }
+
     const producers = sessionStorage.getItem("producers");
     if (producers) {
       setDbProducers(JSON.parse(producers));
       // setProducers(JSON.parse(producers));
-    }
-
-    const products = sessionStorage.getItem("products");
-    if (products) {
-      setDbProducts(JSON.parse(products));
     }
 
     const highlighters = sessionStorage.getItem("highlighters");
@@ -506,9 +518,19 @@ function FormSearch() {
       {producers && producers.length > 0 && <hr />}
 
       {producers &&
-        producers.map((producer: Producer, index: number) => (
-          <Table key={index} data={producer} />
-        ))}
+        producers.length > 0 &&
+        producers
+          .slice(pagination.start, pagination.end)
+          .map((producer, index) => <Table key={index} data={producer} />)}
+
+      {producers && producers.length > 0 && (
+        <Pagination
+          itemsOnPage={itemsOnPage}
+          onPaginationChange={onPaginationChange}
+          total={producers.length}
+          alignment="right"
+        />
+      )}
     </>
   );
 }
