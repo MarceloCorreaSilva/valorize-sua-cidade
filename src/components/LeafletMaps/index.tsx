@@ -6,17 +6,17 @@ import { Highlighter } from "../../repositories/Highlighter";
 import "leaflet/dist/leaflet.css";
 
 // Data
-import geojson from "../../data/geojson.json";
+// import geojson from "../../data/geojson.json";
 
 // Icons SVG
-import bridge from "../../assets/icons/bridge.svg";
-import gate from "../../assets/icons/gate.svg";
-import services from "../../assets/icons/services.svg";
-import dais from "../../assets/icons/dais.svg";
-import silo from "../../assets/icons/silo.svg";
-import waterTank from "../../assets/icons/water-tank.svg";
-import fish from "../../assets/icons/fish.svg";
-import vegetable from "../../assets/icons/vegetable.svg";
+// import bridge from "../../assets/icons/bridge.svg";
+// import gate from "../../assets/icons/gate.svg";
+// import services from "../../assets/icons/services.svg";
+// import dais from "../../assets/icons/dais.svg";
+// import silo from "../../assets/icons/silo.svg";
+// import waterTank from "../../assets/icons/water-tank.svg";
+// import fish from "../../assets/icons/fish.svg";
+// import vegetable from "../../assets/icons/vegetable.svg";
 
 interface Props {
   producers: Producer[];
@@ -27,16 +27,16 @@ const LeafletMaps: React.FC<Props> = ({ producers, highlighters }) => {
   // const [geoJSONOfTheMunicipality, setGeoJSONOfTheMunicipality] = useState(
   //   geojson
   // );
-  const icons = [
-    new Icon({ iconUrl: bridge, iconSize: [40, 40] }),
-    new Icon({ iconUrl: services, iconSize: [40, 40] }),
-    new Icon({ iconUrl: dais, iconSize: [40, 40] }),
-    new Icon({ iconUrl: gate, iconSize: [40, 40] }),
-    new Icon({ iconUrl: silo, iconSize: [40, 40] }),
-    new Icon({ iconUrl: waterTank, iconSize: [40, 40] }),
-    new Icon({ iconUrl: fish, iconSize: [40, 40] }),
-    new Icon({ iconUrl: vegetable, iconSize: [40, 40] }),
-  ];
+  // const icons = [
+  //   new Icon({ iconUrl: bridge, iconSize: [40, 40] }),
+  //   new Icon({ iconUrl: services, iconSize: [40, 40] }),
+  //   new Icon({ iconUrl: dais, iconSize: [40, 40] }),
+  //   new Icon({ iconUrl: gate, iconSize: [40, 40] }),
+  //   new Icon({ iconUrl: silo, iconSize: [40, 40] }),
+  //   new Icon({ iconUrl: waterTank, iconSize: [40, 40] }),
+  //   new Icon({ iconUrl: fish, iconSize: [40, 40] }),
+  //   new Icon({ iconUrl: vegetable, iconSize: [40, 40] }),
+  // ];
 
   useEffect(() => {
     // console.log(highlighters);
