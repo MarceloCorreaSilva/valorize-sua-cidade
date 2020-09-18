@@ -24,6 +24,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # credentials
-# /src/credentials
+/src/credentials
 
 .vercel
