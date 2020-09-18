@@ -57,9 +57,6 @@ const Table: React.FC<TableProps> = ({ data }) => {
           <table
             className="uk-table uk-table-divider uk-table-small"
             id="datatable"
-            style={{
-              height: "200px",
-            }}
           >
             <thead>
               <tr>
