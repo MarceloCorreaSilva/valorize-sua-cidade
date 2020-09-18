@@ -1,7 +1,7 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
 
 // Credentials
-import credentials from "../credentials/google-sheets-api.json";
+import credentials from "../_credentials/google-sheets-api.json";
 
 const doc = new GoogleSpreadsheet(
   process.env.REACT_APP_GOOGLE_SPREADSHEET as string
