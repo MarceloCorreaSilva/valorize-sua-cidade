@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import { Icon } from "leaflet";
 import { Map, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import { Producer } from "../../repositories/Producer";
 import { Highlighter } from "../../repositories/Highlighter";
-import "leaflet/dist/leaflet.css";
+// import "leaflet/dist/leaflet.css";
 
 // Data
 // import geojson from "../../data/geojson.json";
@@ -24,6 +24,10 @@ interface Props {
 }
 
 const LeafletMaps: React.FC<Props> = ({ producers, highlighters }) => {
+  const [coordinates] = useState({
+    lat: Number(process.env.REACT_APP_CITY_LAT),
+    lng: Number(process.env.REACT_APP_CITY_LNG),
+  });
   // const [geoJSONOfTheMunicipality, setGeoJSONOfTheMunicipality] = useState(
   //   geojson
   // );
@@ -39,12 +43,12 @@ const LeafletMaps: React.FC<Props> = ({ producers, highlighters }) => {
   // ];
 
   useEffect(() => {
-    // console.log(highlighters);
-  }, [highlighters]);
+    // console.log(coordinates);
+  }, [coordinates]);
 
   return (
     <Map
-      center={[-18.675444, -53.64186]}
+      center={[coordinates.lat, coordinates.lng]}
       zoom={10}
       style={{ width: "100%", height: "400px", opacity: "0.9" }}
     >
@@ -64,11 +68,7 @@ const LeafletMaps: React.FC<Props> = ({ producers, highlighters }) => {
 
       {highlighters &&
         highlighters.map((highlighter: Highlighter, key) => (
-          <Marker
-            key={key}
-            position={[highlighter.lat, highlighter.lng]}
-            // icon={icons[highlighter.icon]}
-          >
+          <Marker key={key} position={[highlighter.lat, highlighter.lng]}>
             <Popup>
               <div>
                 <h2>{highlighter.name}</h2>

@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
-import {
-  GoogleMap,
-  LoadScript,
-  Marker,
-  Polygon,
-  InfoWindow,
-} from "@react-google-maps/api";
+import { GoogleMap, LoadScript, Marker, Polygon } from "@react-google-maps/api";
 
 // Components || Interfaces
 import { Producer } from "../../repositories/Producer";
@@ -14,7 +8,7 @@ import { Highlighter } from "../../repositories/Highlighter";
 import { Georeferencing } from "../../repositories/Georeferencing";
 
 // Data
-import geojson from "../../data/geojson.json";
+// import geojson from "../../data/geodata/5003900.json";
 
 interface Props {
   producers: Producer[];
@@ -26,13 +20,50 @@ interface LatLng {
 }
 
 const Map: React.FC<Props> = ({ producers, highlighters }) => {
-  const [geoJSONOfTheMunicipality, setGeoJSONOfTheMunicipality] = useState(geojson);
+  const [coordinates] = useState({
+    lat: Number(process.env.REACT_APP_CITY_LAT),
+    lng: Number(process.env.REACT_APP_CITY_LNG),
+  });
+  const [geoJSONOfTheMunicipality, setGeoJSONOfTheMunicipality] = useState({
+    type: "Feature",
+    properties: {
+      id: "",
+      name: "",
+      description: "",
+    },
+    geometry: {
+      type: "Polygon",
+      coordinates: [[]],
+    },
+  });
+
+  useEffect(() => {
+    const load = async () => {
+      const municipality = process.env.REACT_APP_CITY_MUNICIPALITY_CODE_AT_IBGE;
+      const geojson2 = await import(
+        `../../data/geodata/${municipality}.json`
+      ).then((data) => {
+        setGeoJSONOfTheMunicipality(data.features[0]);
+        console.dir(data.features[0]);
+      });
+
+      // setGeoJSONOfTheMunicipality(geojson2.default);
+
+      console.dir({
+        municipality,
+        // geojson,
+        geojson2,
+      });
+    };
+
+    load();
+  }, []);
 
   const renderGeoJSONOfTheMunicipality = () => {
-    let coordinates =
-      geoJSONOfTheMunicipality.features[0].geometry.coordinates[0];
+    // let coordinates = geoJSONOfTheMunicipality.features[0].geometry.coordinates[0];
+    const coordinates = geoJSONOfTheMunicipality.geometry.coordinates[0];
     let coordArr = Array<LatLng>();
-    coordinates.map((coordinate) =>
+    coordinates.map((coordinate: any) =>
       coordArr.push({ lat: coordinate[1], lng: coordinate[0] })
     );
     return (
@@ -129,8 +160,8 @@ const Map: React.FC<Props> = ({ producers, highlighters }) => {
           height: "500px",
         }}
         center={{
-          lat: -18.675444,
-          lng: -53.64186,
+          lat: coordinates.lat,
+          lng: coordinates.lng,
         }}
         zoom={9}
       >

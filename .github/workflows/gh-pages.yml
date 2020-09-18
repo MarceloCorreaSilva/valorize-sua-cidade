@@ -21,6 +21,10 @@ jobs:
     env:
       REACT_APP_APP_NAME: "Valorize sua Cidade"
       REACT_APP_CITY_NAME: "Ipameri-GO"
+      REACT_APP_CITY_MUNICIPALITY_CODE_AT_IBGE: 5210109
+      REACT_APP_CITY_LAT: -18.675444
+      REACT_APP_CITY_LNG: -53.64186
+
       REACT_APP_USE_GOOGLE_MAP: "false"
 
       REACT_APP_GOOGLE_SPREADSHEET: "1UH36sjZ4fQZxspsx9InlSjeumj0x5-pupy-SoILOapM"
