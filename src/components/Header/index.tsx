@@ -1,5 +1,8 @@
 import React from "react";
 
+// Configs
+import config from "../../config";
+
 function Header() {
   return (
     <section
@@ -8,7 +11,7 @@ function Header() {
     >
       <div className="uk-container">
         <h2 className="uk-margin-remove uk-text-bold">
-          Mapa de {process.env.REACT_APP_CITY_NAME}
+          Mapa de {config.city.name}
         </h2>
       </div>
     </section>

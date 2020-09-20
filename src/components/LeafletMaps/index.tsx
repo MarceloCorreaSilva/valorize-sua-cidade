@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 // import { Icon } from "leaflet";
 import { Map, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
+
+// Repositories
 import { Producer } from "../../repositories/Producer";
 import { Highlighter } from "../../repositories/Highlighter";
+
+// Configs
+import config from "../../config";
 // import "leaflet/dist/leaflet.css";
 
 // Data
@@ -24,10 +29,11 @@ interface Props {
 }
 
 const LeafletMaps: React.FC<Props> = ({ producers, highlighters }) => {
-  const [coordinates] = useState({
-    lat: Number(process.env.REACT_APP_CITY_LAT),
-    lng: Number(process.env.REACT_APP_CITY_LNG),
-  });
+  // const [coordinates] = useState({
+  //   lat: Number(process.env.REACT_APP_CITY_LAT),
+  //   lng: Number(process.env.REACT_APP_CITY_LNG),
+  // });
+  const [coordinates] = useState(config.city.coordinate);
   // const [geoJSONOfTheMunicipality, setGeoJSONOfTheMunicipality] = useState(
   //   geojson
   // );
