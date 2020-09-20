@@ -1,8 +1,5 @@
 import { doc } from "../../services/google.spreadsheets";
-import { Product } from "../Product";
-
-// API
-// import api from "../../services/api";
+import productRepository, { Product } from "../Product";
 
 // Props
 export interface Producer {
@@ -12,10 +9,10 @@ export interface Producer {
   nome: string;
   proprietario: string;
   inscricao_estadual: string;
-  empregados: string;
-  area_total: string;
-  area_de_horta: string;
-  area_de_pomar: string;
+  empregados: number;
+  area_total: number;
+  area_de_horta: number;
+  area_de_pomar: number;
   irrigacao: boolean;
   cultivo_protegido: boolean;
   veiculos: number;
@@ -25,12 +22,8 @@ export interface Producer {
   produtos: Product[];
 }
 
-// const URL_PRODUCERS = `${api.URL_BACKEND}/producers`;
-
 const getAll = async () => {
   await doc.loadInfo(); // loads document properties and worksheets
-  // console.log(doc.title);
-  // console.log(doc);
 
   const sheet = doc.sheetsByIndex[0];
   const rows = await sheet.getRows();
@@ -54,62 +47,37 @@ const getAll = async () => {
       Longitude,
     }) => {
       return {
-        id: ID,
+        id: Number(ID),
         data_atualizacao: DataAtualização,
         tipo: Tipo,
         nome: Nome,
         proprietario: Proprietário,
         inscricao_estadual: InscriçãoEstadual,
-        empregados: Empregados,
-        area_total: AreaTotal,
-        area_de_horta: AreaDeHorta,
-        area_de_pomar: AreaDePomar,
+        empregados: Empregados ? Number(Empregados) : 0,
+        area_total: AreaTotal ? Number(AreaTotal) : 0,
+        area_de_horta: AreaDeHorta ? Number(AreaDeHorta) : 0,
+        area_de_pomar: AreaDePomar ? Number(AreaDePomar) : 0,
         irrigacao: Irrigação === "1" ? true : false,
         cultivo_protegido: CultivoProtegido === "1" ? true : false,
-        veiculos: Veiculos,
-        comercializacao: Comercialização.replaceAll(' ', '').split(','),
+        veiculos: Veiculos ? Number(Veiculos) : 0,
+        comercializacao: Comercialização
+          ? Comercialização.replaceAll(" ", "").split(",")
+          : "",
         latitude: parseFloat(Latitude),
         longitude: parseFloat(Longitude),
-        produtos: []
+        produtos: [],
       };
     }
   );
 
-  // eslint-disable-next-line array-callback-return
-  // itens.map((item) => {
-  //   create(item);
-  // });
+  const producers = itens.map((producer: Producer) => {
+    return {
+      ...producer,
+      produtos: productRepository.getProductsByProducerId(producer.id)
+    }
+  });
 
-  return itens;
+  return producers;
 };
-
-// const getAll = async () => {
-//   return fetch(`${URL_PRODUCERS}?_embed=products`).then(async (response) => {
-//     if (response.ok) {
-//       const resposta = await response.json();
-//       return resposta;
-//     }
-
-//     throw new Error("Não foi possível pegar os dados");
-//   });
-// };
-
-// const create = async (producer: Producer) => {
-//   const response = await fetch(`${URL_PRODUCERS}`, {
-//     method: "POST",
-//     headers: {
-//       "Content-type": "application/json",
-//     },
-
-//     body: JSON.stringify(producer),
-//   });
-
-//   return response.status;
-//   // if (response.ok) {
-//   //   const resposta = await response.json();
-//   //   return resposta;
-//   // }
-//   // throw new Error("Não foi possível cadastrar os dados");
-// };
 
 export default { getAll };

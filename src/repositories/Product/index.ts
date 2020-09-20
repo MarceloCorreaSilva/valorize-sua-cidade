@@ -28,7 +28,6 @@ export interface Product {
 
 const getAll = async () => {
   await doc.loadInfo(); // loads document properties and worksheets
-  //   console.log(doc.title);
 
   const sheet = doc.sheetsByIndex[1];
   const rows = await sheet.getRows();
@@ -49,66 +48,55 @@ const getAll = async () => {
       Outubro,
       Novembro,
       Dezembro,
-      Total
+      Total,
     }) => {
       return {
-        producerId: Produtor,
+        producerId: Number(Produtor),
         name: Produto,
-        year: Ano,
+        year: Number(Ano),
         months: [
-          { month: "jan", total: Janeiro },
-          { month: "fev", total: Fevereiro },
-          { month: "mar", total: Março },
-          { month: "abr", total: Abril },
-          { month: "mai", total: Maio },
-          { month: "jun", total: Junho },
-          { month: "jul", total: Julho },
-          { month: "ago", total: Agosto },
-          { month: "set", total: Setembro },
-          { month: "out", total: Outubro },
-          { month: "nov", total: Novembro },
-          { month: "dez", total: Dezembro },
+          { month: "jan", total: parseFloat(Janeiro) },
+          { month: "fev", total: parseFloat(Fevereiro) },
+          { month: "mar", total: parseFloat(Março) },
+          { month: "abr", total: parseFloat(Abril) },
+          { month: "mai", total: parseFloat(Maio) },
+          { month: "jun", total: parseFloat(Junho) },
+          { month: "jul", total: parseFloat(Julho) },
+          { month: "ago", total: parseFloat(Agosto) },
+          { month: "set", total: parseFloat(Setembro) },
+          { month: "out", total: parseFloat(Outubro) },
+          { month: "nov", total: parseFloat(Novembro) },
+          { month: "dez", total: parseFloat(Dezembro) },
         ],
-        jan: Janeiro,
-        fev: Fevereiro,
-        mar: Março,
-        abr: Abril,
-        mai: Maio,
-        jun: Junho,
-        jul: Julho,
-        ago: Agosto,
-        set: Setembro,
-        out: Outubro,
-        nov: Novembro,
-        dez: Dezembro,
-        total: Total
+        jan: parseFloat(Janeiro),
+        fev: parseFloat(Fevereiro),
+        mar: parseFloat(Março),
+        abr: parseFloat(Abril),
+        mai: parseFloat(Maio),
+        jun: parseFloat(Junho),
+        jul: parseFloat(Julho),
+        ago: parseFloat(Agosto),
+        set: parseFloat(Setembro),
+        out: parseFloat(Outubro),
+        nov: parseFloat(Novembro),
+        dez: parseFloat(Dezembro),
+        total: parseFloat(Total),
       };
     }
   );
 
-  // eslint-disable-next-line array-callback-return
-  // itens.map((item) => {
-  //   create(item);
-  // });
-
   return itens;
 };
 
-// const create = async (product: Product) => {
-//   const response = await fetch(`http://localhost:8000/products`, {
-//     method: "POST",
-//     headers: {
-//       "Content-type": "application/json",
-//     },
-//     body: JSON.stringify(product),
-//   });
+const getProductsByProducerId = (id: number) => {
+  let sessionProducts = JSON.parse(sessionStorage.getItem("products") || "");
+  if (sessionProducts) {
+    const products = sessionProducts.filter(
+      (product: Product) => product.producerId === id ? product : null
+    );
+    return products;
+  }
+  return [];
+};
 
-//   return response.status;
-//   if (response.ok) {
-//     const resposta = await response.json();
-//     return resposta;
-//   }
-//   throw new Error("Não foi possível cadastrar os dados");
-// };
-
-export default { getAll };
+export default { getAll, getProductsByProducerId };
