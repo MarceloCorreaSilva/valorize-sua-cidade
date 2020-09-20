@@ -49,7 +49,7 @@ const Table: React.FC<TableProps> = ({ data }) => {
           <strong>Cultivo protegido:</strong>{" "}
           {data.cultivo_protegido === true ? "Sim" : "Não"} /{" "}
           <strong>Veiculos:</strong> {data.veiculos} /{" "}
-          <strong>Comercialização:</strong> {data.comercializacao.join(", ")}
+          <strong>Comercialização:</strong> {data.comercializacao ? data.comercializacao.join(", ") : ""}
         </p>
       </div>
       <div className="uk-card-body">

@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useEffect,
   useState,
+  useCallback,
+  FormEvent,
+  ChangeEvent,
+  useEffect,
 } from "react";
 import { Link } from "react-router-dom";
 import { ValueType, OptionTypeBase as OptionType } from "react-select";
 
-// Components
-import { Select, Checkbox, Button, Table } from "../Html";
-import Pagination from "../Pagination";
-import GoogleMap from "../GoogleMaps";
-import LeafletMap from "../LeafletMaps";
-
 // Configs
 import config from "../../config";
+
+// Components
+import { Select, Checkbox, Button, Table } from "../Html";
+import GoogleMap from "../GoogleMaps";
+import LeafletMap from "../LeafletMaps";
+import Pagination from "../Pagination";
 
 // Data
 import data from "../../data/data.json";
@@ -27,15 +27,15 @@ import productRepository, { Product } from "../../repositories/Product";
 import highlighterRepository, {
   Highlighter,
 } from "../../repositories/Highlighter";
+// import georeferencingRepository, { Georeferencing } from "../../repositories/Georeferencing";
 
-// Props
 interface Filter {
   value: string;
   label: string;
 }
 
-const FormSearch: React.FC = () => {
-  // Filters States
+function FormSearch() {
+  // Filters
   const [structures, setStructures] = useState<Filter[]>([]);
   const [months, setMonths] = useState<Filter[]>([]);
   const [livestocks, setLivestocks] = useState<Filter[]>([]);
@@ -44,163 +44,136 @@ const FormSearch: React.FC = () => {
   const [coveredPlanting, setCoveredPlanting] = useState(false);
   const [irrigated, setIrrigated] = useState(false);
 
-  // States
-  const [products, setProducts] = useState<Product[]>([]);
+  // DB
+  const [dbProducers, setDbProducers] = useState<Producer[]>([]);
+  const [dbProducts, setDbProducts] = useState<Product[]>([]);
+  const [dbHighlighter, setDbHighlighter] = useState<Highlighter[]>([]);
+  // const [dbGeoreferencing, setDbGeoreferencing] = useState<Georeferencing[]>([]);
+
+  //
   const [producers, setProducers] = useState<Producer[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [highlighters, setHighlighters] = useState<Highlighter[]>([]);
+  // const [georeferencing, setGeoreferencing] = useState<Georeferencing[]>([]);
 
-  // Session State
-  const [sessionProducts, setSessionProducts] = useState<Product[]>([]);
-  const [sessionProducers, setSessionProducers] = useState<Producer[]>([]);
-  const [sessionHighlighters, setSessionHighlighters] = useState<Highlighter[]>(
-    []
-  );
-
-  // Pagination State
+  // Pagination
   const [itemsOnPage, setItemsOnPage] = useState(4);
   const [pagination, setPagination] = useState({
     start: 0,
     end: itemsOnPage,
   });
 
-  // Load Data From Google Spreadsheets
-  useEffect(() => {
-    const loadDataSpreadsheetsFromGoogle = async () => {
-      const products = sessionStorage.getItem("products");
-      if (!products) {
-        productRepository
-          .getAll()
-          .then((response) => {
-            setSessionProducts(response);
-            sessionStorage.setItem("products", JSON.stringify(response));
-          })
-          .catch((error) => {
-            console.error(error);
-          })
-          .finally(() => {
-            console.log("Produtos");
-          });
-      } else {
-        setSessionProducts(JSON.parse(products));
-      }
-
-      const producers = sessionStorage.getItem("producers");
-      if (!producers) {
-        producerRepository
-          .getAll()
-          .then(async (response) => {
-            setSessionProducers(response);
-            sessionStorage.setItem("producers", JSON.stringify(response));
-          })
-          .catch((error) => {
-            console.error(error);
-          })
-          .finally(() => {
-            console.log("Produtores");
-          });
-      } else {
-        setSessionProducers(JSON.parse(producers));
-      }
-
-      const highlighters = sessionStorage.getItem("highlighters");
-      if (!highlighters) {
-        highlighterRepository
-          .getAll()
-          .then((response) => {
-            setSessionHighlighters(response);
-            sessionStorage.setItem("highlighters", JSON.stringify(response));
-          })
-          .catch((error) => {
-            console.error(error);
-          })
-          .finally(() => {
-            console.log("Marcadores");
-          });
-      } else {
-        setSessionHighlighters(JSON.parse(highlighters));
-      }
-    };
-
-    loadDataSpreadsheetsFromGoogle();
-  }, []);
-
   const onPaginationChange = (start: number, end: number) => {
     setPagination({ start: start, end: end });
   };
+  // Pagination
 
-  const filterHighlighters = useCallback(() => {
-    let filterStructures: any[] = [];
-    if (structures && structures.length > 0) {
-      filterStructures = structures.map((item) => item.value);
-      console.log(filterStructures);
+  // Load Data From Google Spreadsheets
+  useEffect(() => {
+    const loadDataSpreadsheetsFromGoogle = () => {
+      productRepository
+        .getAll()
+        .then((response) => {
+          setDbProducts(response);
+          sessionStorage.setItem("products", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log("Produtos");
+        });
+
+      producerRepository
+        .getAll()
+        .then((response) => {
+          setDbProducers(response);
+          sessionStorage.setItem("producers", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log("Produtores");
+        });
+
+      highlighterRepository
+        .getAll()
+        .then((response) => {
+          setDbHighlighter(response);
+          sessionStorage.setItem("highlighters", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log("Marcadores");
+        });
+    };
+
+    const products = sessionStorage.getItem("products");
+    const producers = sessionStorage.getItem("producers");
+    const highlighters = sessionStorage.getItem("highlighters");
+
+    if (!products && !producers && !highlighters) {
+      loadDataSpreadsheetsFromGoogle();
     }
 
-    let highlightersWithStructureFilter = sessionHighlighters.filter(
-      (highlighter: Highlighter) => {
-        return filterStructures.includes(highlighter.type) === true
-          ? highlighter
-          : null;
-      }
-    );
+    // const lastUpdate = sessionStorage.getItem("lastUpdate");
+    // const data = new Date();
 
-    return highlightersWithStructureFilter;
-  }, [sessionHighlighters, structures]);
+    // if (lastUpdate) {
+    //   let dateFromStorage = Date.parse(JSON.parse(lastUpdate));
+    //   let actualDate = Date.parse(data.toISOString().split("T")[0]);
 
-  const filterProducers = useCallback(() => {
-    let filterStructures: any[] = [];
-    if (structures && structures.length > 0) {
-      filterStructures = structures.map((item) => item.value);
-      console.log(filterStructures);
-    }
+    //   if (actualDate > dateFromStorage) {
+    //     sessionStorage.clear();
+    //     loadDataSpreadsheetsFromGoogle();
+    //   }
+    // } else {
+    //   sessionStorage.setItem(
+    //     "lastUpdate",
+    //     JSON.stringify(data.toISOString().split("T")[0])
+    //   );
+    //   loadDataSpreadsheetsFromGoogle();
+    // }
+  }, []);
 
-    let filterLivestocks: any[] = [];
-    if (livestocks && livestocks.length > 0) {
-      livestocks.map((item) => filterLivestocks.push(item.value));
-      console.log(filterLivestocks);
-    }
+  // useEffect(() => {
+  //   const products = sessionStorage.getItem("products");
+  //   if (products) {
+  //     setDbProducts(JSON.parse(products));
+  //   }
 
-    let filterProductions: any[] = [];
-    if (productions && productions.length > 0) {
-      productions.map((item) => filterProductions.push(item.value));
-      console.log(filterProductions);
-    }
+  //   const producers = sessionStorage.getItem("producers");
+  //   if (producers) {
+  //     setDbProducers(JSON.parse(producers));
+  //     // setProducers(JSON.parse(producers));
+  //   }
 
-    let producers: any[] = [];
-    if (filterStructures.includes("Propriedade")) {
-      producers = sessionProducers;
+  //   const highlighters = sessionStorage.getItem("highlighters");
+  //   if (highlighters) {
+  //     setDbHighlighter(JSON.parse(highlighters));
+  //     // setHighlighters(JSON.parse(highlighters));
+  //   }
+  // }, []);
 
-      if (filterLivestocks.length > 0) {
-        let producersWithLivestockFilter = producers
-          .map((producer: Producer) => {
-            let newProducts = producer.produtos.filter((product: Product) =>
-              filterLivestocks.includes(product.name) === true ? product : null
-            );
-            return { ...producer, produtos: newProducts };
-          })
-          .filter((producer: Producer) => producer.produtos.length > 0);
+  // Load Producer Specific Products
+  const loadSpecificProductsFromProducers = useCallback(() => {
+    let newProducers = dbProducers.map((producer: Producer) => {
+      return {
+        ...producer,
+        produtos: dbProducts.filter(
+          (product: Product) => product.producerId === producer.id
+        ),
+      };
+    });
 
-        producers = producersWithLivestockFilter;
-      }
+    setProducers(newProducers);
+  }, [dbProducers, dbProducts]);
 
-      if (filterProductions.length > 0) {
-        let producersWithProductionFilter = producers
-          .map((producer: Producer) => {
-            let newProducts = producer.produtos.filter(
-              (product: Product) =>
-                filterProductions.includes(product.name) === true
-            );
-            return { ...producer, produtos: newProducts };
-          })
-          .filter((producer: Producer) => producer.produtos.length > 0)
-          .filter((producer: Producer) => producer.irrigacao === irrigated)
-          .filter((producer: Producer) => producer.cultivo_protegido === coveredPlanting );
-
-          producers.concat(producersWithProductionFilter)
-      }
-    }
-
-    return producers;
-  }, [coveredPlanting, irrigated, livestocks, productions, sessionProducers, structures]);
+  // Performs Query Based On Filters
+  const performsQueryBasedOnFilters = useCallback(() => {}, []);
 
   // Clear Search Form
   const handleClearSearchForm = useCallback(() => {
@@ -212,43 +185,21 @@ const FormSearch: React.FC = () => {
     setCoveredPlanting(false);
     setIrrigated(false);
 
-    setHighlighters([]);
     setProducers([]);
   }, []);
 
   // Submit Search Form
   const handleSubmitSearchForm = useCallback(() => {
-    if (
-      structures.length === 0 &&
-      livestocks.length === 0 &&
-      commercializations.length === 0 &&
-      months.length === 0 &&
-      productions.length === 0 &&
-      coveredPlanting === false &&
-      irrigated === false
-    ) {
-      setHighlighters(sessionHighlighters);
-      setProducers(sessionProducers);
-    } else {
-      setHighlighters(filterHighlighters());
-      setProducers(filterProducers());
-    }
-  }, [
-    commercializations.length,
-    coveredPlanting,
-    filterHighlighters,
-    filterProducers,
-    irrigated,
-    livestocks.length,
-    months.length,
-    productions.length,
-    sessionHighlighters,
-    sessionProducers,
-    structures.length,
-  ]);
-
-   // Submit Search Form
-   const handleSubmitSearchForm2 = useCallback(() => {    
+    // loadSpecificProductsFromProducers();
+    let producersWithProducts = dbProducers.map((producer: Producer) => {
+      return {
+        ...producer,
+        produtos: dbProducts.filter(
+          (product: Product) => product.producerId === producer.id
+        ),
+      };
+    });
+    
     if (
       structures.length === 0 &&
       livestocks.length === 0 &&
@@ -258,8 +209,8 @@ const FormSearch: React.FC = () => {
       coveredPlanting === false &&
       irrigated === false
       ) {
-        setProducers(sessionProducers);
-        setHighlighters(sessionHighlighters);
+        setProducers(producersWithProducts);
+        setHighlighters(dbHighlighter);
     } else {
       // List filters
       let filterCommercializations: any[] = [];
@@ -292,7 +243,7 @@ const FormSearch: React.FC = () => {
       }
 
       // Production Filter
-      let producersWithProductionFilter = sessionProducers
+      let producersWithProductionFilter = producersWithProducts
         .map((producer: Producer) => {
           let newProducts = producer.produtos.filter(
             (product: Product) =>
@@ -314,7 +265,7 @@ const FormSearch: React.FC = () => {
         });
 
       // Livestock Filter
-      let producersWithLivestockFilter = sessionProducers
+      let producersWithLivestockFilter = producersWithProducts
         .map((producer: Producer) => {
           let newProducts = producer.produtos.filter(
             (product: Product) =>
@@ -362,7 +313,7 @@ const FormSearch: React.FC = () => {
       );
 
       // Structure Filter
-      let highlightersWithStructureFilter = sessionHighlighters.filter(
+      let highlightersWithStructureFilter = dbHighlighter.filter(
         (highlighter: Highlighter) => {
           return filterStructures.includes(highlighter.type) === true
             ? highlighter
@@ -374,7 +325,24 @@ const FormSearch: React.FC = () => {
       setHighlighters(highlightersWithStructureFilter);
       setProducers(producersLivestockAndProduction);
     }
-  }, [commercializations, coveredPlanting, irrigated, livestocks, months, productions, sessionHighlighters, sessionProducers, structures]);
+  }, [commercializations, coveredPlanting, dbHighlighter, dbProducers, dbProducts, irrigated, livestocks, months, productions, structures]);
+
+  const handleSubmitSearchForm2 = useCallback(() => {
+    if (
+      structures.length === 0 &&
+      livestocks.length === 0 &&
+      commercializations.length === 0 &&
+      months.length === 0 &&
+      productions.length === 0 &&
+      coveredPlanting === false &&
+      irrigated === false
+      ) {
+        setProducers(dbProducers);
+        setHighlighters(dbHighlighter);
+    } else {
+      
+    }
+  }, [commercializations.length, coveredPlanting, dbHighlighter, dbProducers, irrigated, livestocks.length, months.length, productions.length, structures.length]);
 
   return (
     <>
@@ -545,19 +513,19 @@ const FormSearch: React.FC = () => {
       {producers &&
         producers.length > 0 &&
         producers
-        //   .slice(pagination.start, pagination.end)
+          .slice(pagination.start, pagination.end)
           .map((producer, index) => <Table key={index} data={producer} />)}
 
-      {/* {producers && producers.length > 0 && (
+      {producers && producers.length > 0 && (
         <Pagination
           itemsOnPage={itemsOnPage}
           onPaginationChange={onPaginationChange}
           total={producers.length}
           alignment="right"
         />
-      )} */}
+      )}
     </>
   );
-};
+}
 
 export default FormSearch;
