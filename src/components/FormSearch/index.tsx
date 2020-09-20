@@ -147,60 +147,73 @@ const FormSearch: React.FC = () => {
   }, [sessionHighlighters, structures]);
 
   const filterProducers = useCallback(() => {
-    let filterStructures: any[] = [];
+    let producers: Producer[] = [];
+
     if (structures && structures.length > 0) {
+      let filterStructures: any[] = [];
       filterStructures = structures.map((item) => item.value);
-      console.log(filterStructures);
+      //   console.log(filterStructures);
+
+      if (filterStructures.includes("Propriedade")) {
+        producers = sessionProducers;
+      }
     }
 
-    let filterLivestocks: any[] = [];
-    if (livestocks && livestocks.length > 0) {
-      livestocks.map((item) => filterLivestocks.push(item.value));
-      console.log(filterLivestocks);
-    }
+    if (
+      (livestocks && livestocks.length > 0) ||
+      (productions && productions.length > 0)
+    ) {
+      let filterLivestocksAndProductions: any[] = [];
+      livestocks.map((item) => filterLivestocksAndProductions.push(item.value));
+      productions.map((item) =>
+        filterLivestocksAndProductions.push(item.value)
+      );
+      //   console.log(filterLivestocksAndProductions);
 
-    let filterProductions: any[] = [];
-    if (productions && productions.length > 0) {
-      productions.map((item) => filterProductions.push(item.value));
-      console.log(filterProductions);
-    }
-
-    let producers: any[] = [];
-    if (filterStructures.includes("Propriedade")) {
-      producers = sessionProducers;
-
-      if (filterLivestocks.length > 0) {
-        let producersWithLivestockFilter = producers
+      if (filterLivestocksAndProductions.length > 0) {
+        let producersLivestocksAndProductions = producers
           .map((producer: Producer) => {
-            let newProducts = producer.produtos.filter((product: Product) =>
-              filterLivestocks.includes(product.name) === true ? product : null
+            let newProducts = producer.produtos.filter(
+              (product: Product) =>
+                filterLivestocksAndProductions.includes(product.name) === true
             );
             return { ...producer, produtos: newProducts };
           })
           .filter((producer: Producer) => producer.produtos.length > 0);
 
-        producers = producersWithLivestockFilter;
-      }
-
-      if (filterProductions.length > 0) {
-        let producersWithProductionFilter = producers
-          .map((producer: Producer) => {
-            let newProducts = producer.produtos.filter(
-              (product: Product) =>
-                filterProductions.includes(product.name) === true
-            );
-            return { ...producer, produtos: newProducts };
-          })
-          .filter((producer: Producer) => producer.produtos.length > 0)
-          .filter((producer: Producer) => producer.irrigacao === irrigated)
-          .filter((producer: Producer) => producer.cultivo_protegido === coveredPlanting );
-
-          producers.concat(producersWithProductionFilter)
+        producers = producersLivestocksAndProductions;
       }
     }
 
+    if (commercializations && commercializations.length > 0) {
+      let filterCommercializations: any[] = [];
+      filterCommercializations = commercializations.map((item) => item.value);
+      //   console.log(filterCommercializations);
+
+      let producersCommercializations = producers.filter(
+        (producer: Producer) => {
+          console.log(producer.comercializacao);
+          return filterCommercializations.map((item) =>
+            producer.comercializacao.indexOf(item) > -1 ? producer : null
+          );
+        }
+      );
+
+      producers = producersCommercializations;
+    }
+
+    if (irrigated || coveredPlanting) {
+      let producersIrrigatedOrCovered = producers
+        .filter((producer: Producer) => producer.irrigacao === irrigated)
+        .filter(
+          (producer: Producer) => producer.cultivo_protegido === coveredPlanting
+        );
+
+      producers = producersIrrigatedOrCovered;
+    }
+
     return producers;
-  }, [coveredPlanting, irrigated, livestocks, productions, sessionProducers, structures]);
+  }, [commercializations, coveredPlanting, irrigated, livestocks, productions, sessionProducers, structures]);
 
   // Clear Search Form
   const handleClearSearchForm = useCallback(() => {
@@ -247,141 +260,12 @@ const FormSearch: React.FC = () => {
     structures.length,
   ]);
 
-   // Submit Search Form
-   const handleSubmitSearchForm2 = useCallback(() => {    
-    if (
-      structures.length === 0 &&
-      livestocks.length === 0 &&
-      commercializations.length === 0 &&
-      months.length === 0 &&
-      productions.length === 0 &&
-      coveredPlanting === false &&
-      irrigated === false
-      ) {
-        setProducers(sessionProducers);
-        setHighlighters(sessionHighlighters);
-    } else {
-      // List filters
-      let filterCommercializations: any[] = [];
-      if (commercializations && commercializations.length > 0) {
-        filterCommercializations = commercializations.map((item) => item.value);
-        // console.log(filterCommercializations);
-      }
-
-      let filterLivestocks: any[] = [];
-      if (livestocks && livestocks.length > 0) {
-        livestocks.map((item) => filterLivestocks.push(item.value));
-        // console.log(filterLivestocks);
-      }
-
-      let filterProductions: any[] = [];
-      if (productions && productions.length > 0) {
-        productions.map((item) => filterProductions.push(item.value));
-        // console.log(filterProductions);
-      }
-
-      let filterMonths: any[] = [];
-      if (months && months.length > 0) {
-        filterMonths = months.map((item) => item.value);
-      }
-
-      let filterStructures: any[] = [];
-      if (structures && structures.length > 0) {
-        filterStructures = structures.map((item) => item.value);
-        // console.log(filterStructures);
-      }
-
-      // Production Filter
-      let producersWithProductionFilter = sessionProducers
-        .map((producer: Producer) => {
-          let newProducts = producer.produtos.filter(
-            (product: Product) =>
-              filterProductions.includes(product.name) === true
-          );
-          return { ...producer, produtos: newProducts };
-        })
-        .filter((producer: Producer) => producer.produtos?.length > 0)
-        .filter((producer: Producer) =>
-          producer.irrigacao === irrigated ? producer : null
-        )
-        .filter((producer: Producer) =>
-          producer.cultivo_protegido === coveredPlanting ? producer : null
-        )
-        .filter((producer: Producer) => {
-          return filterCommercializations.map((item) =>
-            producer.comercializacao.indexOf(item) > -1 ? producer : null
-          );
-        });
-
-      // Livestock Filter
-      let producersWithLivestockFilter = sessionProducers
-        .map((producer: Producer) => {
-          let newProducts = producer.produtos.filter(
-            (product: Product) =>
-              filterLivestocks.includes(product.name) === true
-          );
-          return { ...producer, produtos: newProducts };
-        })
-        .filter((producer: Producer) => producer.produtos.length > 0)
-        .filter((producer: Producer) =>
-          filterCommercializations.map((item) =>
-            producer.comercializacao.includes(item)
-          )
-        );
-
-      // Livestock and Production Filter
-      let producersLivestockAndProduction = producersWithProductionFilter.concat(
-        producersWithLivestockFilter
-      );
-
-      // Livestock and Month Filter
-      let producersWithMonthFilter = producersWithProductionFilter.filter(
-        (producer: Producer) => {
-          // Products With Month Filter
-          let productsWithMonthFilter = producer.produtos.filter(
-            (product: Product) => {
-              // Month with Positive Production
-              let monthsWithProduction = product.months.filter(
-                (month) => month.total > 0
-              );
-              // Filtered Based on the Filter
-              let filteredProducts = monthsWithProduction
-                .map((production) =>
-                  filterMonths.includes(production.month) === true
-                    ? product
-                    : null
-                )
-                .filter((product) => product);
-
-              return filteredProducts.length > 0 ? product : null;
-            }
-          );
-          // console.log("productsWithMonthFilter: ", productsWithMonthFilter);
-          return { ...producer, produtos: productsWithMonthFilter };
-        }
-      );
-
-      // Structure Filter
-      let highlightersWithStructureFilter = sessionHighlighters.filter(
-        (highlighter: Highlighter) => {
-          return filterStructures.includes(highlighter.type) === true
-            ? highlighter
-            : null;
-        }
-      );
-      // console.log("Filter: ", highlightersWithStructureFilter);
-
-      setHighlighters(highlightersWithStructureFilter);
-      setProducers(producersLivestockAndProduction);
-    }
-  }, [commercializations, coveredPlanting, irrigated, livestocks, months, productions, sessionHighlighters, sessionProducers, structures]);
-
   return (
     <>
       <form
         onSubmit={(event: FormEvent) => {
           event.preventDefault();
-          handleSubmitSearchForm2();
+          handleSubmitSearchForm();
         }}
       >
         <fieldset className="uk-fieldset">
@@ -545,7 +429,7 @@ const FormSearch: React.FC = () => {
       {producers &&
         producers.length > 0 &&
         producers
-        //   .slice(pagination.start, pagination.end)
+          //   .slice(pagination.start, pagination.end)
           .map((producer, index) => <Table key={index} data={producer} />)}
 
       {/* {producers && producers.length > 0 && (
