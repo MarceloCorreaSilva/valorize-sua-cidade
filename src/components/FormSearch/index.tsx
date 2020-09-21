@@ -234,10 +234,10 @@ const FormSearch: React.FC = () => {
   // Submit Search Form
   const handleSubmitSearchForm = useCallback(() => {
     if (
-      structures.length === 0 &&
-      livestocks.length === 0 &&
-      commercializations.length === 0 &&
-      productions.length === 0 &&
+      (structures && structures.length === 0) &&
+      (livestocks && livestocks.length === 0) &&
+      (commercializations && commercializations.length === 0) &&
+      (productions && productions.length === 0) &&
       coveredPlanting === false &&
       irrigated === false
     ) {
@@ -248,16 +248,16 @@ const FormSearch: React.FC = () => {
       setProducers(filterProducers());
     }
   }, [
-    commercializations.length,
+    commercializations,
     coveredPlanting,
     filterHighlighters,
     filterProducers,
     irrigated,
-    livestocks.length,
-    productions.length,
+    livestocks,
+    productions,
     sessionHighlighters,
     sessionProducers,
-    structures.length,
+    structures,
   ]);
   // ./Submit Search Form
 
