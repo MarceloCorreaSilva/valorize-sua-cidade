@@ -1,19 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {
   ChangeEvent,
   FormEvent,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from "react"
 import { Link } from "react-router-dom";
 import { ValueType, OptionTypeBase as OptionType } from "react-select";
 
 // Components
 import { Select, Checkbox, Button, Table } from "../Html";
-import Pagination from "../Pagination";
-import GoogleMap from "../GoogleMaps";
-import LeafletMap from "../LeafletMaps";
+// import Pagination from "../Pagination";
+import GoogleMap from "../Maps/GoogleMaps";
+import LeafletMap from "../Maps/LeafletMaps";
 
 // Configs
 import config from "../../config";
@@ -37,7 +36,6 @@ interface Filter {
 const FormSearch: React.FC = () => {
   // Filters States
   const [structures, setStructures] = useState<Filter[]>([]);
-  const [months, setMonths] = useState<Filter[]>([]);
   const [livestocks, setLivestocks] = useState<Filter[]>([]);
   const [productions, setProductions] = useState<Filter[]>([]);
   const [commercializations, setCommercializations] = useState<Filter[]>([]);
@@ -45,23 +43,19 @@ const FormSearch: React.FC = () => {
   const [irrigated, setIrrigated] = useState(false);
 
   // States
-  const [products, setProducts] = useState<Product[]>([]);
+  // const [products, setProducts] = useState<Product[]>([]);
   const [producers, setProducers] = useState<Producer[]>([]);
   const [highlighters, setHighlighters] = useState<Highlighter[]>([]);
 
   // Session State
-  const [sessionProducts, setSessionProducts] = useState<Product[]>([]);
   const [sessionProducers, setSessionProducers] = useState<Producer[]>([]);
   const [sessionHighlighters, setSessionHighlighters] = useState<Highlighter[]>(
     []
   );
 
   // Pagination State
-  const [itemsOnPage, setItemsOnPage] = useState(4);
-  const [pagination, setPagination] = useState({
-    start: 0,
-    end: itemsOnPage,
-  });
+  // const [itemsOnPage, setItemsOnPage] = useState(4);
+  // const [pagination, setPagination] = useState({start: 0, end: itemsOnPage});
 
   // Load Data From Google Spreadsheets
   useEffect(() => {
@@ -71,7 +65,6 @@ const FormSearch: React.FC = () => {
         productRepository
           .getAll()
           .then((response) => {
-            setSessionProducts(response);
             sessionStorage.setItem("products", JSON.stringify(response));
           })
           .catch((error) => {
@@ -80,8 +73,6 @@ const FormSearch: React.FC = () => {
           .finally(() => {
             console.log("Produtos");
           });
-      } else {
-        setSessionProducts(JSON.parse(products));
       }
 
       const producers = sessionStorage.getItem("producers");
@@ -123,16 +114,14 @@ const FormSearch: React.FC = () => {
 
     loadDataSpreadsheetsFromGoogle();
   }, []);
+  // ./Load Data From Google Spreadsheets
 
-  const onPaginationChange = (start: number, end: number) => {
-    setPagination({ start: start, end: end });
-  };
-
+  // Filters
   const filterHighlighters = useCallback(() => {
     let filterStructures: any[] = [];
     if (structures && structures.length > 0) {
       filterStructures = structures.map((item) => item.value);
-      console.log(filterStructures);
+      // console.log(filterStructures);
     }
 
     let highlightersWithStructureFilter = sessionHighlighters.filter(
@@ -152,7 +141,7 @@ const FormSearch: React.FC = () => {
     if (structures && structures.length > 0) {
       let filterStructures: any[] = [];
       filterStructures = structures.map((item) => item.value);
-      //   console.log(filterStructures);
+      // console.log(filterStructures);
 
       if (filterStructures.includes("Propriedade")) {
         producers = sessionProducers;
@@ -168,18 +157,18 @@ const FormSearch: React.FC = () => {
       productions.map((item) =>
         filterLivestocksAndProductions.push(item.value)
       );
-      //   console.log(filterLivestocksAndProductions);
+      // console.log(filterLivestocksAndProductions);
 
       if (filterLivestocksAndProductions.length > 0) {
         let producersLivestocksAndProductions = producers
           .map((producer: Producer) => {
-            let newProducts = producer.produtos.filter(
+            let newProducts = producer.products.filter(
               (product: Product) =>
                 filterLivestocksAndProductions.includes(product.name) === true
             );
-            return { ...producer, produtos: newProducts };
+            return { ...producer, products: newProducts };
           })
-          .filter((producer: Producer) => producer.produtos.length > 0);
+          .filter((producer: Producer) => producer.products.length > 0);
 
         producers = producersLivestocksAndProductions;
       }
@@ -192,10 +181,11 @@ const FormSearch: React.FC = () => {
 
       let producersCommercializations = producers.filter(
         (producer: Producer) => {
-          console.log(producer.comercializacao);
-          return filterCommercializations.map((item) =>
-            producer.comercializacao.indexOf(item) > -1 ? producer : null
-          );
+          return filterCommercializations.map((item) => {
+            return producer.commercialization.includes(item) === true
+              ? producer
+              : null;
+          });
         }
       );
 
@@ -203,22 +193,33 @@ const FormSearch: React.FC = () => {
     }
 
     if (irrigated || coveredPlanting) {
-      let producersIrrigatedOrCovered = producers
-        .filter((producer: Producer) => producer.irrigacao === irrigated)
-        .filter(
-          (producer: Producer) => producer.cultivo_protegido === coveredPlanting
-        );
+      let producersIrrigatedOrCovered = producers.filter(
+        (producer: Producer) => {
+          return (
+            producer.irrigated === irrigated &&
+            producer.covered_planting === coveredPlanting
+          );
+        }
+      );
 
       producers = producersIrrigatedOrCovered;
     }
 
     return producers;
-  }, [commercializations, coveredPlanting, irrigated, livestocks, productions, sessionProducers, structures]);
+  }, [
+    commercializations,
+    coveredPlanting,
+    irrigated,
+    livestocks,
+    productions,
+    sessionProducers,
+    structures,
+  ]);
+  // ./Filters
 
   // Clear Search Form
   const handleClearSearchForm = useCallback(() => {
     setStructures([]);
-    setMonths([]);
     setLivestocks([]);
     setProductions([]);
     setCommercializations([]);
@@ -228,6 +229,7 @@ const FormSearch: React.FC = () => {
     setHighlighters([]);
     setProducers([]);
   }, []);
+  // ./Clear Search Form
 
   // Submit Search Form
   const handleSubmitSearchForm = useCallback(() => {
@@ -235,7 +237,6 @@ const FormSearch: React.FC = () => {
       structures.length === 0 &&
       livestocks.length === 0 &&
       commercializations.length === 0 &&
-      months.length === 0 &&
       productions.length === 0 &&
       coveredPlanting === false &&
       irrigated === false
@@ -253,12 +254,12 @@ const FormSearch: React.FC = () => {
     filterProducers,
     irrigated,
     livestocks.length,
-    months.length,
     productions.length,
     sessionHighlighters,
     sessionProducers,
     structures.length,
   ]);
+  // ./Submit Search Form
 
   return (
     <>
@@ -284,30 +285,8 @@ const FormSearch: React.FC = () => {
                 isMultiple={true}
                 value={structures}
                 options={data.geographic_structure}
-                // onChange={setStructures}
                 onChange={(selectedOption: ValueType<OptionType>) => {
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  const value = (selectedOption as OptionType).value;
-
                   setStructures(
-                    selectedOption?.map((selected: OptionType) => selected)
-                  );
-                }}
-              />
-            </div>
-            <div className="uk-width-1-2@s uk-grid-margin uk-first-column">
-              <Select
-                name="months"
-                placeholder="Selecione a sazonalidade..."
-                isMultiple={true}
-                value={months}
-                options={data.months}
-                // onChange={setMonths}
-                onChange={(selectedOption: ValueType<OptionType>) => {
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  const value = (selectedOption as OptionType).value;
-
-                  setMonths(
                     selectedOption?.map((selected: OptionType) => selected)
                   );
                 }}
@@ -325,11 +304,7 @@ const FormSearch: React.FC = () => {
                 isMultiple={true}
                 value={livestocks}
                 options={data.livestock}
-                // onChange={setLivestocks}
                 onChange={(selectedOption: ValueType<OptionType>) => {
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  const value = (selectedOption as OptionType).value;
-
                   setLivestocks(
                     selectedOption?.map((selected: OptionType) => selected)
                   );
@@ -344,11 +319,7 @@ const FormSearch: React.FC = () => {
                   isMultiple={true}
                   value={productions}
                   options={data.production}
-                  // onChange={setProductions}
                   onChange={(selectedOption: ValueType<OptionType>) => {
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    const value = (selectedOption as OptionType).value;
-
                     setProductions(
                       selectedOption?.map((selected: OptionType) => selected)
                     );
@@ -368,11 +339,7 @@ const FormSearch: React.FC = () => {
                 isMultiple={true}
                 value={commercializations}
                 options={data.commercialization}
-                // onChange={setCommercializations}
                 onChange={(selectedOption: ValueType<OptionType>) => {
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  const value = (selectedOption as OptionType).value;
-
                   setCommercializations(
                     selectedOption?.map((selected: OptionType) => selected)
                   );
@@ -408,7 +375,7 @@ const FormSearch: React.FC = () => {
             </div>
             <div className="uk-width-auto uk-grid-margin">
               <Link
-                to="!#"
+                to="#"
                 className="uk-button uk-button-default uk-button-large uk-icon-link uk-icon"
                 uk-icon="icon: close; ratio: 2"
                 onClick={handleClearSearchForm}
@@ -419,23 +386,34 @@ const FormSearch: React.FC = () => {
       </form>
 
       {config.useGoogleMaps === true ? (
-        <GoogleMap producers={producers} highlighters={highlighters} />
+        <div className="uk-container">
+          <GoogleMap producers={producers} highlighters={highlighters} />
+        </div>
       ) : (
-        <LeafletMap producers={producers} highlighters={highlighters} />
+        <div className="uk-container">
+          <LeafletMap producers={producers} highlighters={highlighters} />
+        </div>
       )}
 
-      {producers && producers.length > 0 && <hr />}
-
-      {producers &&
-        producers.length > 0 &&
-        producers
-          //   .slice(pagination.start, pagination.end)
-          .map((producer, index) => <Table key={index} data={producer} />)}
+      {producers && producers.length > 0 && (
+        <>
+          <hr />
+          <div className="uk-container">
+            {producers
+              // .slice(pagination.start, pagination.end)
+              .map((producer, index) => (
+                <Table key={index} data={producer} />
+              ))}
+          </div>
+        </>
+      )}
 
       {/* {producers && producers.length > 0 && (
         <Pagination
           itemsOnPage={itemsOnPage}
-          onPaginationChange={onPaginationChange}
+          onPaginationChange={(start: number, end: number) => {
+            setPagination({ start: start, end: end });
+          }}
           total={producers.length}
           alignment="right"
         />

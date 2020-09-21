@@ -4,22 +4,22 @@ import productRepository, { Product } from "../Product";
 // Props
 export interface Producer {
   id: number;
-  data_atualizacao: string;
-  tipo: string;
-  nome: string;
-  proprietario: string;
-  inscricao_estadual: string;
-  empregados: number;
-  area_total: number;
-  area_de_horta: number;
-  area_de_pomar: number;
-  irrigacao: boolean;
-  cultivo_protegido: boolean;
-  veiculos: number;
-  comercializacao: string[];
-  latitude: number;
-  longitude: number;
-  produtos: Product[];
+  updated_at: string;
+  type: string;
+  name: string;
+  owner: string;
+  state_registration: string;
+  employees: number;
+  total_area: number;
+  vegetable_garden_area: number;
+  orchard_area: number;
+  irrigated: boolean;
+  covered_planting: boolean;
+  vehicles: number;
+  commercialization: string[];
+  lat: number;
+  lng: number;
+  products: Product[];
 }
 
 const getAll = async () => {
@@ -48,24 +48,24 @@ const getAll = async () => {
     }) => {
       return {
         id: Number(ID),
-        data_atualizacao: DataAtualização,
-        tipo: Tipo,
-        nome: Nome,
-        proprietario: Proprietário,
-        inscricao_estadual: InscriçãoEstadual,
-        empregados: Empregados ? Number(Empregados) : 0,
-        area_total: AreaTotal ? Number(AreaTotal) : 0,
-        area_de_horta: AreaDeHorta ? Number(AreaDeHorta) : 0,
-        area_de_pomar: AreaDePomar ? Number(AreaDePomar) : 0,
-        irrigacao: Irrigação === "1" ? true : false,
-        cultivo_protegido: CultivoProtegido === "1" ? true : false,
-        veiculos: Veiculos ? Number(Veiculos) : 0,
-        comercializacao: Comercialização
+        updated_at: DataAtualização,
+        type: Tipo,
+        name: Nome,
+        owner: Proprietário,
+        state_registration: InscriçãoEstadual,
+        employees: Empregados ? Number(Empregados) : 0,
+        total_area: AreaTotal ? Number(AreaTotal) : 0,
+        vegetable_garden_area: AreaDeHorta ? Number(AreaDeHorta) : 0,
+        orchard_area: AreaDePomar ? Number(AreaDePomar) : 0,
+        irrigated: Irrigação === "1" ? true : false,
+        covered_planting: CultivoProtegido === "1" ? true : false,
+        vehicles: Veiculos ? Number(Veiculos) : 0,
+        commercialization: Comercialização
           ? Comercialização.replaceAll(" ", "").split(",")
           : "",
-        latitude: parseFloat(Latitude),
-        longitude: parseFloat(Longitude),
-        produtos: [],
+        lat: Number(Latitude),
+        lng: Number(Longitude),
+        products: [],
       };
     }
   );
@@ -73,7 +73,7 @@ const getAll = async () => {
   const producers = itens.map((producer: Producer) => {
     return {
       ...producer,
-      produtos: productRepository.getProductsByProducerId(producer.id)
+      products: productRepository.getProductsByProducerId(producer.id)
     }
   });
 

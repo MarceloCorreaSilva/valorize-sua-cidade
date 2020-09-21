@@ -28,4 +28,7 @@ yarn-error.log*
 /src/services/_api-axios.ts
 /src/services/_api.ts
 
+# components
+/src/components/FormSearch/_index.txt
+
 .vercel

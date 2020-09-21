@@ -1,16 +1,10 @@
 import { doc } from "../../services/google.spreadsheets";
 
 // Props
-export interface ProductionOfTheMonth {
-  month: string;
-  total: number;
-}
-
 export interface Product {
   producerId: number;
   name: string;
   year: number;
-  months: ProductionOfTheMonth[];
   jan: number;
   fev: number;
   mar: number;
@@ -54,20 +48,6 @@ const getAll = async () => {
         producerId: Number(Produtor),
         name: Produto,
         year: Number(Ano),
-        months: [
-          { month: "jan", total: parseFloat(Janeiro) },
-          { month: "fev", total: parseFloat(Fevereiro) },
-          { month: "mar", total: parseFloat(Março) },
-          { month: "abr", total: parseFloat(Abril) },
-          { month: "mai", total: parseFloat(Maio) },
-          { month: "jun", total: parseFloat(Junho) },
-          { month: "jul", total: parseFloat(Julho) },
-          { month: "ago", total: parseFloat(Agosto) },
-          { month: "set", total: parseFloat(Setembro) },
-          { month: "out", total: parseFloat(Outubro) },
-          { month: "nov", total: parseFloat(Novembro) },
-          { month: "dez", total: parseFloat(Dezembro) },
-        ],
         jan: parseFloat(Janeiro),
         fev: parseFloat(Fevereiro),
         mar: parseFloat(Março),

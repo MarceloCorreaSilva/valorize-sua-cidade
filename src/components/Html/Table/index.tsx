@@ -1,22 +1,18 @@
 import React, { useState } from "react";
 
-// Repositories
-import { ProductionOfTheMonth } from "../../../repositories/Product";
-
 // Props
 export interface TableProps {
   data: {
     id: number;
-    nome: string;
-    proprietario: string;
-    irrigacao: boolean;
-    cultivo_protegido: boolean;
-    veiculos: number;
-    comercializacao: string[];
-    produtos: {
+    name: string;
+    owner: string;
+    irrigated: boolean;
+    covered_planting: boolean;
+    vehicles: number;
+    commercialization: string[];
+    products: {
       name: string;
       year: number;
-      months: ProductionOfTheMonth[];
       jan: number;
       fev: number;
       mar: number;
@@ -35,21 +31,21 @@ export interface TableProps {
 }
 
 const Table: React.FC<TableProps> = ({ data }) => {
-  const [products] = useState(data.produtos);
+  const [products] = useState(data.products);
 
   return (
     <div className="uk-card uk-card-default" style={{ marginBottom: "25px" }}>
       <div className="uk-card-header">
         <h3 className="uk-card-title">
-          {data.id} - {data.nome}
+          {data.id} - {data.name}
         </h3>
         <p>
-          <strong>Proprietário(a):</strong> {data.proprietario} /{" "}
-          <strong>Irrigado:</strong> {data.irrigacao === true ? "Sim" : "Não"} /{" "}
+          <strong>Proprietário(a):</strong> {data.owner} /{" "}
+          <strong>Irrigado:</strong> {data.irrigated === true ? "Sim" : "Não"} /{" "}
           <strong>Cultivo protegido:</strong>{" "}
-          {data.cultivo_protegido === true ? "Sim" : "Não"} /{" "}
-          <strong>Veiculos:</strong> {data.veiculos} /{" "}
-          <strong>Comercialização:</strong> {data.comercializacao ? data.comercializacao.join(", ") : ""}
+          {data.covered_planting === true ? "Sim" : "Não"} /{" "}
+          <strong>Veiculos:</strong> {data.vehicles} /{" "}
+          <strong>Comercialização:</strong> {data.commercialization ? data.commercialization.join(", ") : ""}
         </p>
       </div>
       <div className="uk-card-body">
@@ -81,7 +77,7 @@ const Table: React.FC<TableProps> = ({ data }) => {
               {products &&
                 products.map((product, index) => (
                   <tr key={index}>
-                    <td>{product.name}</td>
+                    <td><strong>{product.name}</strong></td>
                     <td>{product.year}</td>
                     <td>{product.jan}</td>
                     <td>{product.fev}</td>

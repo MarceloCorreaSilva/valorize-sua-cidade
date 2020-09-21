@@ -51,29 +51,7 @@ const getAll = async () => {
     }
   );
 
-  // eslint-disable-next-line array-callback-return
-  // itens.map((item) => {
-  //   create(item);
-  // });
-
   return itens;
 };
-
-// const create = async (highlighter: Highlighter) => {
-//   const response = await fetch(`http://localhost:8000/highlighters`, {
-//     method: "POST",
-//     headers: {
-//       "Content-type": "application/json",
-//     },
-//     body: JSON.stringify(highlighter),
-//   });
-
-//   return response.status;
-//   if (response.ok) {
-//     const resposta = await response.json();
-//     return resposta;
-//   }
-//   throw new Error("Não foi possível cadastrar os dados");
-// };
 
 export default { getAll };
