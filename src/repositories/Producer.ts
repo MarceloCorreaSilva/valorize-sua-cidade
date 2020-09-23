@@ -1,26 +1,10 @@
-import { doc } from "../../services/google.spreadsheets";
-import productRepository, { Product } from "../Product";
+import { doc } from "../services/google.spreadsheets";
 
-// Props
-export interface Producer {
-  id: number;
-  updated_at: string;
-  type: string;
-  name: string;
-  owner: string;
-  state_registration: string;
-  employees: number;
-  total_area: number;
-  vegetable_garden_area: number;
-  orchard_area: number;
-  irrigated: boolean;
-  covered_planting: boolean;
-  vehicles: number;
-  commercialization: string[];
-  lat: number;
-  lng: number;
-  products: Product[];
-}
+// Entities / Props
+import { Producer } from "../entities/Producer";
+
+// Repositories
+import productRepository from "./Product";
 
 const getAll = async () => {
   await doc.loadInfo(); // loads document properties and worksheets

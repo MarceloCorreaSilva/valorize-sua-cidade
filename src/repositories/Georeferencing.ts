@@ -1,4 +1,4 @@
-import { doc } from "../../services/google.spreadsheets";
+import { doc } from "../services/google.spreadsheets";
 
 // Props
 export interface Georeferencing {

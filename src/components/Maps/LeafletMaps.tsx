@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 // import { Icon } from "leaflet";
 import { Map, TileLayer, Marker, Popup, Tooltip, GeoJSON } from "react-leaflet";
 
-// Components || Interfaces
-import { Producer } from "../../repositories/Producer";
-import { Highlighter } from "../../repositories/Highlighter";
-
 // Configs
 import config from "../../config";
+
+// Entities / Props
+import { Highlighter } from "../../entities/Highlighter";
+import { Producer } from "../../entities/Producer";
 
 // Icons SVG
 // import bridge from "../../assets/icons/bridge.svg";

@@ -1,24 +1,7 @@
-import { doc } from "../../services/google.spreadsheets";
+import { doc } from "../services/google.spreadsheets";
 
-// Props
-export interface Product {
-  producerId: number;
-  name: string;
-  year: number;
-  jan: number;
-  fev: number;
-  mar: number;
-  abr: number;
-  mai: number;
-  jun: number;
-  jul: number;
-  ago: number;
-  set: number;
-  out: number;
-  nov: number;
-  dez: number;
-  total: number;
-}
+// Entitie / Props
+import { Product } from "../entities/Product";
 
 const getAll = async () => {
   await doc.loadInfo(); // loads document properties and worksheets

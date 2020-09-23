@@ -1,15 +1,4 @@
-import { doc } from "../../services/google.spreadsheets";
-
-// Props
-export interface Highlighter {
-  id: number;
-  type: string;
-  name: string;
-  lat: number;
-  lng: number;
-  description: string;
-  icon?: number;
-}
+import { doc } from "../services/google.spreadsheets";
 
 const getIcon = (type: string) => {
   if (type === "Ponte") {
@@ -33,7 +22,6 @@ const getIcon = (type: string) => {
 
 const getAll = async () => {
   await doc.loadInfo(); // loads document properties and worksheets
-  //   console.log(doc.title);
 
   const sheet = doc.sheetsByIndex[2];
   const rows = await sheet.getRows();
