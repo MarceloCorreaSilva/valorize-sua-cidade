@@ -62,7 +62,7 @@ const FormSearch: React.FC<Props> = ({
     if (structures && structures.length > 0) {
       let filterStructures: any[] = [];
       filterStructures = structures.map((item) => item.value);
-      console.log(filterStructures);
+      // console.log(filterStructures);
 
       if (filterStructures.includes('Propriedade')) {
         producers = sessionProducers;
@@ -73,7 +73,7 @@ const FormSearch: React.FC<Props> = ({
       let filterLivestocksAndProductions: any[] = [];
       livestocks.map((item) => filterLivestocksAndProductions.push(item.value));
       productions.map((item) => filterLivestocksAndProductions.push(item.value));
-      console.log(filterLivestocksAndProductions);
+      // console.log(filterLivestocksAndProductions);
 
       if (filterLivestocksAndProductions.length > 0) {
         let producersLivestocksAndProductions = producers
@@ -87,7 +87,7 @@ const FormSearch: React.FC<Props> = ({
 
         producers = producersLivestocksAndProductions;
 
-        console.log({ producers, producersLivestocksAndProductions });
+        // console.log({ producers, producersLivestocksAndProductions });
       }
     }
 
@@ -115,7 +115,6 @@ const FormSearch: React.FC<Props> = ({
 
     return producers;
   }, [commercializations, coveredPlanting, irrigated, livestocks, productions, sessionProducers, structures]);
-
 
   // Clear Search Form
   const handleClearSearchForm = useCallback(() => {
@@ -162,7 +161,7 @@ const FormSearch: React.FC<Props> = ({
     sessionProducers,
     structures,
     handleProducersFilters,
-    handleHighlightersFilters
+    handleHighlightersFilters,
   ]);
 
   return (
@@ -184,7 +183,7 @@ const FormSearch: React.FC<Props> = ({
           <div className="uk-width-expand uk-first-column">
             <Select
               name="structures"
-              placeholder="Selecione a estrutura geográfica..."
+              placeholder="Estrutura geográfica..."
               isMultiple={true}
               value={structures}
               options={data.geographic_structure}
@@ -198,7 +197,7 @@ const FormSearch: React.FC<Props> = ({
           <div className="uk-width-expand uk-first-column">
             <Select
               name="livestocks"
-              placeholder="Selecione a pecuária..."
+              placeholder="Pecuária..."
               isMultiple={true}
               value={livestocks}
               options={data.livestock}
@@ -211,7 +210,7 @@ const FormSearch: React.FC<Props> = ({
             <div id="filter_producao">
               <Select
                 name="productions"
-                placeholder="Selecione os gêneros alimentícios..."
+                placeholder="Gêneros alimentícios..."
                 isMultiple={true}
                 value={productions}
                 options={data.production}
@@ -226,7 +225,7 @@ const FormSearch: React.FC<Props> = ({
           <div className="uk-width-1-2@s uk-first-column">
             <Select
               name="commercializations"
-              placeholder="Selecione os canais de comercialização..."
+              placeholder="Canais de comercialização..."
               isMultiple={true}
               value={commercializations}
               options={data.commercialization}
@@ -250,7 +249,7 @@ const FormSearch: React.FC<Props> = ({
               <div>
                 <Checkbox
                   name="irrigated"
-                  label="Irrigação"
+                  label="Plantio Irrigado"
                   checked={irrigated}
                   onChange={(event: ChangeEvent<HTMLInputElement>) => {
                     setIrrigated(event.target.checked);

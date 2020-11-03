@@ -340,7 +340,7 @@ function FormSearch() {
         setProducers(dbProducers);
         setHighlighters(dbHighlighter);
     } else {
-      
+      console.log();
     }
   }, [commercializations.length, coveredPlanting, dbHighlighter, dbProducers, irrigated, livestocks.length, months.length, productions.length, structures.length]);
 

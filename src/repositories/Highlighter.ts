@@ -28,7 +28,7 @@ const getAll = async () => {
   const itens = rows.map(
     ({ ID, Tipo, Nome, Latitude, Longitude, Descrição }) => {
       return {
-        id: ID,
+        id: Number(ID),
         type: Tipo,
         name: Nome,
         lat: parseFloat(Latitude),

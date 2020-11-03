@@ -40,23 +40,18 @@ const Home = () => {
     <Layout>
       <section className="uk-section uk-section-small">
         <div className="uk-container">
-          {loading ? (
-            <Loader />
-          ) : (
-            <>
-              <FormSearch
-                sessionProducers={sessionProducers}
-                sessionHighlighters={sessionHighlighters}
-                handleProducersFilters={(producers) => {
-                  setProducers(producers);
-                }}
-                handleHighlightersFilters={(highlighters) => {
-                  setHighlighters(highlighters);
-                }}
-              />
-            </>
-          )}
+          {loading && <Loader />}
 
+          <FormSearch
+            sessionProducers={sessionProducers}
+            sessionHighlighters={sessionHighlighters}
+            handleProducersFilters={(producers) => {
+              setProducers(producers);
+            }}
+            handleHighlightersFilters={(highlighters) => {
+              setHighlighters(highlighters);
+            }}
+          />
           <Maps producers={producers} highlighters={highlighters} />
 
           {producers && producers.length > 0 && (

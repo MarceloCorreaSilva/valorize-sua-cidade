@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
 // Components
-import Header from "../../../components/Header";
-import Footer from "../../../components/Footer";
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 
 interface LayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const Default: React.FC<LayoutProps> = ({ children }) => {
@@ -20,6 +20,6 @@ const Default: React.FC<LayoutProps> = ({ children }) => {
       </div>
     </div>
   );
-}
+};
 
 export default Default;
